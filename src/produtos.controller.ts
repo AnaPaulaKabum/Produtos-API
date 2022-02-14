@@ -1,41 +1,37 @@
 import { Body, Controller, Delete, Get, Param,Post, Put } from "@nestjs/common";
-import {Produto} from './produto.model';
+import { Produto } from "./produto.model";
+import { ProdutosServices } from "./produtos.service";
 
 @Controller('produtos')
 export class ProdutosController{
 
-    produtos : Array<Produto> = [
-        new Produto("LIV001","Livro TDD e BDD na prática",29.90),
-        new Produto("LIV002","Livro Iniciando com Flutter",39.90),
-        new Produto("LIV003","Inteligencia artificial na pratica",29.90)
-    ]
+    constructor(private produtosServices: ProdutosServices){      
+    }
 
     @Get()
     obterTodos(): Array<Produto>{
-        return this.produtos;
+        return this.produtosServices.obterTodos();
     }
 
     @Get(':id')
     obterUm(@Param() params):Produto
     {
-        return this.produtos[0];
+        return this.produtosServices.obterUm(params.id);
     }
 
     @Post()
     criar(@Body() produto: Produto){
-        console.log(produto);
         produto.id = 100;
-        this.produtos.push(produto);
+        this.produtosServices.criar(produto);
     }
 
     @Put()
     alterar(@Body() produto: Produto): Produto{
-        return produto;
+        return this.produtosServices.alterar(produto);
     }
 
     @Delete(':id')
-    apaga(@Param() params){
-       this.produtos.pop();
+    apagar(@Param() params){
+       this.produtosServices.apagar(params.id);
     }
-
 }
