@@ -5,9 +5,9 @@ import { Produto } from "./produto.model";
 export class ProdutosServices{
 
     produtos : Array<Produto> = [
-        new Produto("LIV001","Livro TDD e BDD na prática",29.90),
+       /* new Produto("LIV001","Livro TDD e BDD na prática",29.90),
         new Produto("LIV002","Livro Iniciando com Flutter",39.90),
-        new Produto("LIV003","Inteligencia artificial na pratica",29.90)
+        new Produto("LIV003","Inteligencia artificial na pratica",29.90)*/
     ];
 
     obterTodos():Array<Produto>{

@@ -2,3 +2,19 @@
 Criar um controle:
 -Cria um arquivo de controller e adiciona em app.module.ts
 
+
+
+
+#---------------------------------------------------------------------------------------------
+#Instalar o mysql:
+$ sudo apt update
+$ sudo apt install mysql-server
+$ sudo mysql_secure_installation -- realizar configuração.
+
+Link: https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04-pt
+
+Problema ao acessar o banco:
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+
+Link: https://stackoverflow.com/questions/62231627/access-denied-for-user-rootlocalhost-in-dbeaver
