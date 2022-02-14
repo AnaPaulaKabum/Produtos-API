@@ -1,0 +1,4 @@
+
+Criar um controle:
+-Cria um arquivo de controller e adiciona em app.module.ts
+
