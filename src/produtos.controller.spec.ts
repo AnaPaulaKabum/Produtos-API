@@ -51,6 +51,8 @@ describe('ProdutosController', () => {
 
      //Assert realiza o teste
       expect(resultado).toEqual(produtosLista);
+      //chamar a camada de services uma vez.
+      expect(produtosService.obterTodos).toHaveBeenCalledTimes(1);
     });
 
     it('Espera um throw exectipion',async () =>{
@@ -71,6 +73,7 @@ describe('ProdutosController', () => {
       const result = await produtosController.obterUm(pos);
 
       expect(result).toEqual(produtosLista[pos]);
+      expect(produtosService.obterUm).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -85,6 +88,8 @@ describe('ProdutosController', () => {
 
      //Assert realiza o teste
       expect(resultado).toEqual(produtoNovo);
+      expect(produtosService.criar).toHaveBeenCalledTimes(1);
+      
     });
   });
 
@@ -96,6 +101,7 @@ describe('ProdutosController', () => {
       const resultado = await produtosController.alterar(body);
 
       expect(resultado).toEqual(produtoAlterar);
+      expect(produtosService.alterar).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -107,6 +113,9 @@ describe('ProdutosController', () => {
       const resultado = await produtosController.apagar(id);
 
       expect(resultado).toEqual(true);
+      expect(produtosService.apagar).toHaveBeenCalledTimes(1);
+     expect(produtosController.obterUm).toHaveBeenCalled;
     });
   });
+
 });
