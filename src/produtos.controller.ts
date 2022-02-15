@@ -30,7 +30,7 @@ export class ProdutosController{
     }
 
     @Delete(':id')
-    async apagar(@Param() params):Promise<boolean> {
-       return this.produtosServices.apagar(params.id);
+    async apagar(@Param() params):Promise<void> {
+       this.produtosServices.apagar(params.id);
     }
 }

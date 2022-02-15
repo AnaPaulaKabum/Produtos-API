@@ -32,10 +32,11 @@ export class ProdutosServices{
         });
     }
 
-    async apagar(id:number):Promise<boolean> {
-       const produto : Produto = await this.obterUm(id);
-       await produto.destroy();
-       return true;
-     }
+    async apagar(id:number): Promise<void>{
+       const produto  = await this.obterUm(id);
+        this.produtoModel.destroy({where: {
+            id: produto.id
+        } });
 
+     }
 }

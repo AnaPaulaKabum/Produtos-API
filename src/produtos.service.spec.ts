@@ -32,7 +32,7 @@ describe('ProdutosService', () => {
           findByPk: jest.fn().mockResolvedValue(produtosLista[0]),
           create: jest.fn().mockResolvedValue(produtoNovo),
           update: jest.fn().mockResolvedValue(produtoAlterar),
-          destroy: jest.fn()
+          destroy: jest.fn().mockResolvedValue(undefined),
         }
       }
     ],
@@ -90,14 +90,14 @@ describe('ProdutosService', () => {
     });
   });
 
- /* describe('Apagar', () => {
+  describe('Apagar', () => {
     it('Deletar um Produto"', async () => {
 
       const id  = 2;
 
       const resultado = await produtosService.apagar(id);
+      expect(resultado).toBeUndefined();
       expect(produtoRepositorio.destroy).toHaveBeenCalled;
-      expect(resultado).toEqual(true);
     });
-  });*/
+  });
 });

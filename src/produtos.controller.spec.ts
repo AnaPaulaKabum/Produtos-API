@@ -33,7 +33,7 @@ describe('ProdutosController', () => {
           obterUm: jest.fn().mockResolvedValue(produtosLista[0]),
           criar: jest.fn().mockResolvedValue(produtoNovo),
           alterar: jest.fn().mockResolvedValue(produtoAlterar),
-          apagar: jest.fn().mockResolvedValue(true)
+          apagar: jest.fn().mockResolvedValue(undefined)
         }
       }
     ],
@@ -109,12 +109,10 @@ describe('ProdutosController', () => {
     it('Deletar um Produto"', async () => {
 
       const id  = 2;
-
       const resultado = await produtosController.apagar(id);
-
-      expect(resultado).toEqual(true);
+      expect(resultado).toBeUndefined();
       expect(produtosService.apagar).toHaveBeenCalledTimes(1);
-     expect(produtosController.obterUm).toHaveBeenCalled;
+      expect(produtosController.obterUm).toHaveBeenCalled;
     });
   });
 
