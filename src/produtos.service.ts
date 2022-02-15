@@ -34,7 +34,7 @@ export class ProdutosServices{
 
     async apagar(id:number):Promise<boolean> {
        const produto : Produto = await this.obterUm(id);
-       produto.destroy();
+       await produto.destroy();
        return true;
      }
 
