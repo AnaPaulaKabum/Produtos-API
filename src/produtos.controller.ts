@@ -20,8 +20,8 @@ export class ProdutosController{
     }
 
     @Post()
-    async criar(@Body() produto: Produto){
-        this.produtosServices.criar(produto);
+    async criar(@Body() produto: Produto):Promise<Produto>{
+        return this.produtosServices.criar(produto);
     }
 
     @Put()
@@ -30,7 +30,7 @@ export class ProdutosController{
     }
 
     @Delete(':id')
-    async apagar(@Param() params){
-       this.produtosServices.apagar(params.id);
+    async apagar(@Param() params):Promise<boolean> {
+       return this.produtosServices.apagar(params.id);
     }
 }

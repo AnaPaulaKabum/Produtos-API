@@ -19,8 +19,9 @@ export class ProdutosServices{
         return this.produtoModel.findByPk(id);
     }
 
-    async criar(produto: Produto){
-        this.produtoModel.create(produto);
+    async criar(produto: Produto):Promise<Produto>{
+        return this.produtoModel.create(produto);
+        
     }
 
     async alterar(produto: Produto): Promise<[number,Produto[]]>{
@@ -31,9 +32,10 @@ export class ProdutosServices{
         });
     }
 
-    async apagar(id:number){
+    async apagar(id:number):Promise<boolean> {
        const produto : Produto = await this.obterUm(id);
        produto.destroy();
+       return true;
      }
 
 }
