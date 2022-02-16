@@ -16,7 +16,10 @@ export class ProdutosServices{
 
     async obterUm(id:number):Promise<Produto>{
 
-        return this.produtoModel.findByPk(id);
+        const consutlaProduto = this.produtoModel.findByPk(id);
+
+        if (consutlaProduto)
+            return consutlaProduto;
     }
 
     async criar(produto: Produto):Promise<Produto>{
@@ -33,10 +36,6 @@ export class ProdutosServices{
     }
 
     async apagar(id:number): Promise<void>{
-       const produto  = await this.obterUm(id);
-        this.produtoModel.destroy({where: {
-            id: produto.id
-        } });
-
+        this.produtoModel.destroy({where: { id: id } });
      }
 }

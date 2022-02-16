@@ -7,8 +7,7 @@ import { ProdutosServices } from "./produtos.service";
 @ApiTags('produtos')
 export class ProdutosController{
 
-    constructor(private produtosServices: ProdutosServices){      
-    }
+    constructor(private produtosServices: ProdutosServices){}
 
     @Get()
     @ApiOperation({ summary: 'Lista de todos os produtos' })
@@ -19,9 +18,15 @@ export class ProdutosController{
     @Get(':id')
     @ApiOperation({ summary: 'Recupera produto pelo ID' })
     @ApiResponse({status: 200,description: 'Produto encontrado',type: Produto,})
-    async obterUm(@Param('id') id: number):Promise<Produto>
+    async obterUm(@Param('id') id: number):Promise<any>
     {
-        return this.produtosServices.obterUm(id);
+        const produto = await this.produtosServices.obterUm(id);
+
+        if (produto){
+            return produto;
+        }
+
+        return { code : 101, message: `Nao foi encontrado o produto com codigo ${id}`};
     }
 
     @Post()
@@ -39,6 +44,10 @@ export class ProdutosController{
     @Delete(':id')
     @ApiOperation({ summary: 'Deletar um produto' })
     async apagar(@Param('id') id: number):Promise<void> {
-       this.produtosServices.apagar(id);
+
+       const produto = await this.produtosServices.obterUm(id);
+        if (produto){
+            this.produtosServices.apagar(id);
+        }      
     }
 }
