@@ -79,7 +79,7 @@ describe('ProdutosService', () => {
     });
   });
 
-  describe('alterar', () => {
+  /*describe('alterar', () => {
     it('Alterar um Produto"', async () => {
 
       const body  = new Produto({codigo: "LV005", nome: "Alterar Produto", preco:99.90});
@@ -90,7 +90,7 @@ describe('ProdutosService', () => {
     });
   });
 
-  /*describe('Apagar', () => {
+  describe('Apagar', () => {
     it('Deletar um Produto"', async () => {
 
       const produtoApagar  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90});

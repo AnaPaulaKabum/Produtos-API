@@ -75,7 +75,9 @@
     ],
     "coveragePathIgnorePatterns": [
       "app.module.ts",
-      "main.ts"
+      "main.ts",
+      "errorResponse.ts"
+
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

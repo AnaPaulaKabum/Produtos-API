@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param,Post, Put } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ErrorResponse } from "src/errorResponse";
+import { ErrorResponse } from "../errorResponse";
 import { Produto } from "./produto.model";
 import { ProdutosServices } from "./produtos.service";
 
@@ -49,7 +49,8 @@ export class ProdutosController{
 
        const produto = await this.produtosServices.obterUm(id);
         if (produto){
-            this.produtosServices.apagar(produto);           
+            this.produtosServices.apagar(produto);
+            return ;           
         }  
         
         return new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${id}`);
