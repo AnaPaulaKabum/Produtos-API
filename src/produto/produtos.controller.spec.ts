@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Sequelize } from 'sequelize-typescript/dist/sequelize/sequelize/sequelize';
+import { ErrorResponse } from '../errorResponse';
 import { Produto } from './produto.model';
 import { ProdutosController } from './produtos.controller';
 import { ProdutosServices } from './produtos.service';
@@ -14,9 +15,9 @@ const produtosLista: Array<Produto> =[
   new Produto({codigo: "LV004", nome: "Livro JavaScript", preco:40})
 ]
 
-const produtoNovo  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90});
-const produtoAlterar  = new Produto({codigo: "LV006", nome: "Alterar Produto", preco:99.90});
-const produtoApagar  = new Produto({codigo: "LV007", nome: "Apagar Produto", preco:99.90});
+const produtoNovo  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde: 100});
+const produtoAlterar  = new Produto({codigo: "LV006", nome: "Alterar Produto", preco:99.90,qtde: 100});
+const produtoApagar  = new Produto({codigo: "LV007", nome: "Apagar Produto", preco:99.90,qtde: 100});
 
 describe('ProdutosController', () => {
 
@@ -70,10 +71,20 @@ describe('ProdutosController', () => {
     it('Deve retorna apenas um produto"', async () => {
 
       const pos = 0;
-
       const result = await produtosController.obterUm(pos);
 
       expect(result).toEqual(produtosLista[pos]);
+      expect(produtosService.obterUm).toHaveBeenCalledTimes(1);
+    });
+
+    it('Deve retorna um erroMensagem"', async () => {
+
+      const id = 10;
+      const errorResponse = new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${id}`);
+
+      jest.spyOn(produtosService, 'obterUm').mockReturnValueOnce(null)
+      const result = await produtosController.obterUm(id);
+      expect(result).toEqual(errorResponse);
       expect(produtosService.obterUm).toHaveBeenCalledTimes(1);
     });
   });
@@ -111,10 +122,22 @@ describe('ProdutosController', () => {
 
       const id = 0;
       const resultado = await produtosController.apagar(id);
-      //expect(resultado).toBeUndefined();
+      expect(resultado).toBeUndefined();
       expect(produtosService.apagar).toHaveBeenCalledTimes(1);
       expect(produtosController.obterUm).toHaveBeenCalled;
     });
-  });
 
+    it('Retornar mensagem que não foi encontrado o Produto"', async () => {
+
+      const id = 10;
+      const errorResponse = new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${10}`);
+
+      jest.spyOn(produtosService, 'obterUm').mockResolvedValue(undefined);
+
+      const resultado = await produtosController.apagar(id);
+
+      expect(resultado).toEqual(errorResponse);
+      expect(produtosController.obterUm).toHaveBeenCalled;
+    });
+  });
 });
