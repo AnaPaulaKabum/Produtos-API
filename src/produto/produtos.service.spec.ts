@@ -2,6 +2,7 @@ import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'sequelize-typescript';
 import { Sequelize } from 'sequelize-typescript/dist/sequelize/sequelize/sequelize';
+import { ErrorResponse } from '../errorResponse';
 import { Produto } from './produto.model';
 import { ProdutosServices } from './produtos.service';
 
@@ -9,14 +10,14 @@ const sequelize = new Sequelize({ validateOnly: true });
 sequelize.addModels([Produto]);
 
 const produtosLista: Array<Produto> =[
-  new Produto({codigo: "LV001", nome: "Livro C#", preco:15.90}),
-  new Produto({codigo: "LV002", nome: "Livro Python", preco:25.90}),
-  new Produto({codigo: "LV003", nome: "Livro PHP", preco:35.90}),
-  new Produto({codigo: "LV004", nome: "Livro JavaScript", preco:40})
+  new Produto({codigo: "LV001", nome: "Livro C#", preco:15.90, qtde:100}),
+  new Produto({codigo: "LV002", nome: "Livro Python", preco:25.90,qtde:100}),
+  new Produto({codigo: "LV003", nome: "Livro PHP", preco:35.90,qtde:100}),
+  new Produto({codigo: "LV004", nome: "Livro JavaScript", preco:40,qtde:100})
 ]
 
-const produtoNovo  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90});
-const produtoAlterar  = new Produto({codigo: "LV005", nome: "Alterar Produto", preco:99.90});
+const produtoNovo  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
+const produtoAlterar  = [2,[new Produto({codigo: "LV003", nome: "Alterar Produto", preco:99.90,qtde:100})]];
 
 describe('ProdutosService', () => {
 
@@ -79,25 +80,46 @@ describe('ProdutosService', () => {
     });
   });
 
-  /*describe('alterar', () => {
+  describe('alterar', () => {
     it('Alterar um Produto"', async () => {
 
-      const body  = new Produto({codigo: "LV005", nome: "Alterar Produto", preco:99.90});
+      const body = new Produto({codigo: "LV003", nome: "Alterar Produto", preco:99.90,qtde:100});
 
       const resultado = await produtosService.alterar(body);
 
-      expect(resultado).toEqual(produtoAlterar);
+      expect(resultado).toEqual(produtoAlterar[1][0]);
+    });
+
+    it('Ao tentar alterar um Produto, não devera encontrar e deve criar."', async () => {
+
+      const body  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
+
+      jest.spyOn(produtoRepositorio, 'update').mockResolvedValueOnce([0,[]])
+
+      const resultado = await produtosService.alterar(body);
+
+      expect(resultado).toEqual(produtoNovo);
+
     });
   });
 
   describe('Apagar', () => {
     it('Deletar um Produto"', async () => {
 
-      const produtoApagar  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90});
+      const produtoApagar  = new Produto({id: 5,codigo: "LV005", nome: "Novo Produto", preco:99.90,qtde:0});
 
       const resultado = await produtosService.apagar(produtoApagar);
-      expect(resultado).toBeUndefined();
+      expect(resultado).toEqual(produtoApagar.id);
       expect(produtoRepositorio.destroy).toHaveBeenCalled;
     });
-  });*/
+
+    it('Mensagem de erro ao tentar deletar um produto"', async () => {
+
+      const produtoApagar  = new Produto({id: 5,codigo: "LV005", nome: "Novo Produto", preco:99.90,qtde:100});
+      const errorResponse = new ErrorResponse(102, `Nao e possivel deletar um produto com quantidade ${produtoApagar.id}`);
+
+      const resultado = await produtosService.apagar(produtoApagar);
+      expect(resultado).toEqual(errorResponse);
+    });
+  });
 });

@@ -9,10 +9,10 @@ const sequelize = new Sequelize({ validateOnly: true });
 sequelize.addModels([Produto]);
 
 const produtosLista: Array<Produto> =[
-  new Produto({codigo: "LV001", nome: "Livro C#", preco:15.90}),
-  new Produto({codigo: "LV002", nome: "Livro Python", preco:25.90}),
-  new Produto({codigo: "LV003", nome: "Livro PHP", preco:35.90}),
-  new Produto({codigo: "LV004", nome: "Livro JavaScript", preco:40})
+  new Produto({codigo: "LV001", nome: "Livro C#", preco:15.90,qtde:100}),
+  new Produto({codigo: "LV002", nome: "Livro Python", preco:25.90,qtde:100}),
+  new Produto({codigo: "LV003", nome: "Livro PHP", preco:35.90,qtde:100}),
+  new Produto({codigo: "LV004", nome: "Livro JavaScript", preco:40,qtde:100})
 ]
 
 const produtoNovo  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde: 100});
@@ -93,7 +93,7 @@ describe('ProdutosController', () => {
     it('Criar um Produto"', async () => {
 
       //Arrange = Atribuição de um objeto.
-      const body = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90});
+      const body = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
 
       //ACT = o que gostaria de testar;
       const resultado = await produtosController.criar(body);

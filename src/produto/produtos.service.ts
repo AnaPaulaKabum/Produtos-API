@@ -12,31 +12,30 @@ export class ProdutosServices{
     {}
 
     async obterTodos():Promise<Produto[]>{
+
         return  this.produtoModel.findAll();
     }
 
     async obterUm(id:number):Promise<Produto>{
 
-        const consutlaProduto = this.produtoModel.findByPk(id);
-
-        if (consutlaProduto)
-            return consutlaProduto;
+        return this.produtoModel.findByPk(id);
     }
 
     async criar(produto: Produto):Promise<Produto>{
-        return this.produtoModel.create(produto);
-        
+
+        return this.produtoModel.create(produto);        
     }
 
     async alterar(produto: Produto): Promise<Produto>{
 
-        const resultado = this.produtoModel.update(produto,{
-                            where: {
+        const resultado = await this.produtoModel.update(produto,{
+                        where: {
                                 id: produto.id
-                            } 
+                               } 
         });
 
-        if (resultado[0] > 0){ return resultado[1][0];
+        if (resultado[0] > 0){ 
+            return resultado[1][0];
         }
 
         return await this.criar(produto);
@@ -45,9 +44,8 @@ export class ProdutosServices{
     async apagar(produto:Produto): Promise<any>{
 
         if (produto.qtde === 0 ){
-
             this.produtoModel.destroy({where: { id: produto.id } });
-            return produto;
+            return produto.id;
         } 
         return new ErrorResponse(102, `Nao e possivel deletar um produto com quantidade ${produto.id}`);
      }
