@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
+import { RespondeError } from "src/errorResponse";
 import { Produto } from "./produto.model";
 
 @Injectable()
@@ -27,15 +28,27 @@ export class ProdutosServices{
         
     }
 
-    async alterar(produto: Produto): Promise<[number,Produto[]]>{
-        return this.produtoModel.update(produto,{
-           where: {
-               id: produto.id
-           } 
+    async alterar(produto: Produto): Promise<Produto>{
+
+        const resultado = this.produtoModel.update(produto,{
+                            where: {
+                                id: produto.id
+                            } 
         });
+
+        if (resultado[0] > 0){ return resultado[1][0];
+        }
+
+        return await this.criar(produto);
     }
 
-    async apagar(id:number): Promise<void>{
-        this.produtoModel.destroy({where: { id: id } });
+    async apagar(produto:Produto): Promise<any>{
+
+        if (produto.qtde === 0 ){
+
+            this.produtoModel.destroy({where: { id: produto.id } });
+            return produto;
+        } 
+        return new RespondeError(102, `Nao e possivel deletar um produto com quantidade ${produto.id}`);
      }
 }

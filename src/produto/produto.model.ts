@@ -15,4 +15,8 @@ export class Produto extends Model{
     @Column({ type: DataType.DECIMAL, allowNull:false})
     @ApiProperty({ example: 19.99})
     preco:number;
+
+    @Column({ type: DataType.INTEGER, allowNull:false})
+    @ApiProperty({ example: 100})
+    qtde:number;
 }
