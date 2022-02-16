@@ -90,14 +90,14 @@ describe('ProdutosService', () => {
     });
   });
 
-  describe('Apagar', () => {
+  /*describe('Apagar', () => {
     it('Deletar um Produto"', async () => {
 
-      const id  = 2;
+      const produtoApagar  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90});
 
-      const resultado = await produtosService.apagar(id);
+      const resultado = await produtosService.apagar(produtoApagar);
       expect(resultado).toBeUndefined();
       expect(produtoRepositorio.destroy).toHaveBeenCalled;
     });
-  });
+  });*/
 });

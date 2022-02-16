@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { RespondeError } from "src/errorResponse";
+import { ErrorResponse } from "src/errorResponse";
 import { Produto } from "./produto.model";
 
 @Injectable()
@@ -49,6 +49,6 @@ export class ProdutosServices{
             this.produtoModel.destroy({where: { id: produto.id } });
             return produto;
         } 
-        return new RespondeError(102, `Nao e possivel deletar um produto com quantidade ${produto.id}`);
+        return new ErrorResponse(102, `Nao e possivel deletar um produto com quantidade ${produto.id}`);
      }
 }
