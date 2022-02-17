@@ -2,32 +2,32 @@ import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'sequelize-typescript';
 import { Sequelize } from 'sequelize-typescript/dist/sequelize/sequelize/sequelize';
+import { ProdutoEntity } from 'src/core/domain/entites/produto.model';
 import { ErrorResponse } from '../errorResponse';
-import { Produto } from './produto.model';
-import { ProdutosServices } from './produtos.service';
+import { ProdutosServices } from '../services/produtos.service';
 
 const sequelize = new Sequelize({ validateOnly: true });
-sequelize.addModels([Produto]);
+sequelize.addModels([ProdutoEntity]);
 
-const produtosLista: Array<Produto> =[
-  new Produto({codigo: "LV001", nome: "Livro C#", preco:15.90, qtde:100}),
-  new Produto({codigo: "LV002", nome: "Livro Python", preco:25.90,qtde:100}),
-  new Produto({codigo: "LV003", nome: "Livro PHP", preco:35.90,qtde:100}),
-  new Produto({codigo: "LV004", nome: "Livro JavaScript", preco:40,qtde:100})
+const produtosLista: Array<ProdutoEntity> =[
+  new ProdutoEntity({codigo: "LV001", nome: "Livro C#", preco:15.90, qtde:100}),
+  new ProdutoEntity({codigo: "LV002", nome: "Livro Python", preco:25.90,qtde:100}),
+  new ProdutoEntity({codigo: "LV003", nome: "Livro PHP", preco:35.90,qtde:100}),
+  new ProdutoEntity({codigo: "LV004", nome: "Livro JavaScript", preco:40,qtde:100})
 ]
 
-const produtoNovo  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
-const produtoAlterar  = [2,[new Produto({codigo: "LV003", nome: "Alterar Produto", preco:99.90,qtde:100})]];
+const produtoNovo  = new ProdutoEntity({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
+const produtoAlterar  = [2,[new ProdutoEntity({codigo: "LV003", nome: "Alterar Produto", preco:99.90,qtde:100})]];
 
 describe('ProdutosService', () => {
 
   let produtosService: ProdutosServices;
-  let produtoRepositorio: Repository<Produto>;
+  let produtoRepositorio: Repository<ProdutoEntity>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [ProdutosServices,
-        { provide: getModelToken(Produto),
+        { provide: getModelToken(ProdutoEntity),
         useValue:{
           findAll: jest.fn().mockResolvedValue(produtosLista),
           findByPk: jest.fn().mockResolvedValue(produtosLista[0]),
@@ -40,7 +40,7 @@ describe('ProdutosService', () => {
     }).compile();
 
     produtosService = module.get<ProdutosServices>(ProdutosServices);
-    produtoRepositorio = module.get<Repository<Produto>>(getModelToken(Produto));
+    produtoRepositorio = module.get<Repository<ProdutoEntity>>(getModelToken(ProdutoEntity));
 
   });
 

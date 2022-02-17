@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { Produto } from './produto/produto.model';
-import { ProdutosController } from './produto/produtos.controller';
-import { ProdutosServices } from './produto/produtos.service';
+import { ProdutosController } from './application/produtos.controller';
+import { ProdutosServices } from './services/produtos.service';
+import { ProdutoEntity } from './core/domain/entites/produto.model';
+import { ProdutoRepository } from './core/repositories/produto.repository';
+import { ProdutoRepositoryCacheMemory } from './data/cache-memory/produtoRepository-cache-memory';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    /*ConfigModule.forRoot(),
     SequelizeModule.forRoot({
       dialect:'mysql',
       host: process.env.HOST,
@@ -20,9 +20,13 @@ import { ProdutosServices } from './produto/produtos.service';
       autoLoadModels:true,
       synchronize: true,
     }),
-    SequelizeModule.forFeature([Produto])
+    SequelizeModule.forFeature([ProdutoEntity])*/
   ],
-  controllers: [AppController,ProdutosController],
-  providers: [AppService,ProdutosServices],
+  controllers: [ProdutosController],
+  providers: [{
+    provide: ProdutoRepository,
+    useClass: ProdutoRepositoryCacheMemory
+  },
+  ProdutosServices],
 })
 export class AppModule {}

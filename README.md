@@ -8,6 +8,21 @@
 
 CRUD de produtos utilizando NestJS [Nest](https://github.com/nestjs/nest).
 
+## Organization 
+
+Presentation ➔ Use Cases ➔ Core ➔ Data
+
+src
+  - core
+      - base: toda classe de abstração e interface de modelo
+      - domain
+      - repositories
+  - data
+  - infra
+  - shared: Criação de Enums, ou DTOs e Exception filters
+  - presentation
+  - use-cases
+
 ## Installation
 
 ```bash

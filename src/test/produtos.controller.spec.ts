@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Sequelize } from 'sequelize-typescript/dist/sequelize/sequelize/sequelize';
 import { ErrorResponse } from '../errorResponse';
 import { Produto } from './produto.model';
-import { ProdutosController } from './produtos.controller';
-import { ProdutosServices } from './produtos.service';
+import { ProdutosController } from '../presentation/produtos.controller';
+import { ProdutosServices } from '../services/produtos.service';
 
 const sequelize = new Sequelize({ validateOnly: true });
 sequelize.addModels([Produto]);
