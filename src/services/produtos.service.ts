@@ -1,82 +1,49 @@
 import { Injectable } from "@nestjs/common";
-import { firstValueFrom, map, Observable } from "rxjs";
 import { ProdutoEntity } from "src/core/domain/entites/produto.model";
-import { ProdutoCreateMapper } from "src/core/domain/mappers/ProdutoCreateMappear";
-import { ProdutoRepository } from "src/core/repositories/produto.repository";
-import { ProdutoCreateDto } from "src/shared/ProdutoCreateDto";
+import { ProdutoMapper } from "src/core/domain/mappers/ProdutoMappear";
+import { ProdutoRepositoryCacheMemory } from "src/data/cache-memory/produtoRepository-cache-memory";
+import { ProdutoDto } from "src/shared/ProdutoDto";
 
 
 @Injectable()
 export class ProdutosServices{
 
-    private produtoCreateMapper: ProdutoCreateMapper;
+    private produtoMapper: ProdutoMapper;
 
-    constructor(private readonly repository: ProdutoRepository) {
-        this.produtoCreateMapper = new ProdutoCreateMapper();
+    constructor(private readonly repository: ProdutoRepositoryCacheMemory<ProdutoEntity> ) {
+        this.produtoMapper = new ProdutoMapper();
     }
-
-    async obterTodos(): Promise<ProdutoEntity[]>{ 
+    
+    async obterTodos(): Promise<ProdutoDto[]>{ 
 
         return await this.repository.obterTodos(); 
     }
-
-    async criar(produto :ProdutoEntity):Promise<ProdutoEntity>{
-
-         return await this.repository.criar(produto);
-
-    }
-
-    async obterUm(id:number):Promise<ProdutoEntity>{
-
-        return await this.repository.obterUm(id);
-       
-    }
-
-    async apagar(produto:ProdutoEntity): Promise<any>{
-
-        this.repository.apagar(produto.id);
-     }
-
-     async alterar(produto: ProdutoEntity): Promise<ProdutoEntity>{
-        return await this.repository.alterar(produto);
-     }
-  
    
-    /*constructor(
-        @InjectModel(Produto)
-        private produtoModel : typeof Produto)
-    {}*/
+    async criar(produto :ProdutoDto):Promise<ProdutoDto>{
 
-
-
-
-/*
-    async criar(produto: Produto):Promise<Produto>{
-
-        return this.produtoModel.create(produto);        
+        const novoProduto = await this.repository.criar(this.produtoMapper.mapFrom(produto));
+         return  this.produtoMapper.mapTo(novoProduto);
     }
 
-    async alterar(produto: Produto): Promise<Produto>{
+    async obterUm(id:number):Promise<ProdutoDto>{
 
-        const resultado = await this.produtoModel.update(produto,{
-                        where: {
-                                id: produto.id
-                               } 
-        });
-
-        if (resultado[0] > 0){ 
-            return resultado[1][0];
-        }
-
-        return await this.criar(produto);
+        const consultaProduto = await this.repository.obterUm(id);
+        return  this.produtoMapper.mapTo(consultaProduto);       
     }
 
-    async apagar(produto:Produto): Promise<any>{
+    async apagar(produto:ProdutoDto): Promise<any>{
 
-        if (produto.qtde === 0 ){
-            this.produtoModel.destroy({where: { id: produto.id } });
-            return produto.id;
-        } 
-        return new ErrorResponse(102, `Nao e possivel deletar um produto com quantidade ${produto.id}`);
-     }*/
+        await this.repository.apagar(produto.id);
+     }
+
+     async alterar(produto: ProdutoDto): Promise<ProdutoDto>{
+
+        console.log('produtoDTO'+produto)
+        const alterarProduto = await this.repository.alterar(this.produtoMapper.mapFrom(produto));
+        console.log('alterarProduto'+alterarProduto)
+
+
+        return  this.produtoMapper.mapTo(alterarProduto); 
+        
+     } 
 }

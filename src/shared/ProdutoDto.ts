@@ -1,5 +1,6 @@
 
-export class ProdutoCreateDto {
+export class ProdutoDto {
+    id?:number;
     codigo:string;
     nome:string;
     preco:number;

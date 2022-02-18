@@ -1,14 +1,10 @@
-import { Injectable } from "@nestjs/common";
 import { firstValueFrom, Observable, of } from "rxjs";
 import { Entity } from "src/core/base/entity";
 import { Repository } from "src/core/base/repository";
 
-
-
-@Injectable()
 export class ProdutoRepositoryCacheMemory<TEntity extends Entity> extends Repository<TEntity>{
 
-    protected readonly items: TEntity[];
+    protected items: TEntity[];
 
     constructor() {
         super();
@@ -46,8 +42,10 @@ export class ProdutoRepositoryCacheMemory<TEntity extends Entity> extends Reposi
     async apagar(id: number): Promise<void> {
 
         // id seria posicao.
-         this.items.splice(id - 1);
+        this.items = this.items.splice(id);
          console.log(this.items);
         return await firstValueFrom(of());
     }
 }
+
+

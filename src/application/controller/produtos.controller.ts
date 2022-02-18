@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param,Post, Put } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ProdutoEntity } from "src/core/domain/entites/produto.model";
 import { ProdutosServices } from "src/services/produtos.service";
-import { ErrorResponse } from "../errorResponse";
+import { ProdutoDto } from "src/shared/ProdutoDto";
+import { ErrorResponse } from "../../errorResponse";
 
 @Controller('produtos')
 @ApiTags('produtos')
@@ -12,20 +12,20 @@ export class ProdutosController{
 
     @Get()
     @ApiOperation({ summary: 'Lista de todos os produtos' })
-    async obterTodos(): Promise<Array<ProdutoEntity>> { 
+    async obterTodos(): Promise<Array<ProdutoDto>> { 
         return await this.produtosServices.obterTodos();
     }
 
     @Post()
     @ApiOperation({ summary: 'Cria um novo produto' })
-    async criar(@Body() produto: ProdutoEntity):Promise <ProdutoEntity>{
+    async criar(@Body() produto: ProdutoDto):Promise <ProdutoDto>{
          return await this.produtosServices.criar(produto);
          
     }
 
     @Get(':id')
     @ApiOperation({ summary: 'Recupera produto pelo ID' })
-    @ApiResponse({status: 200,description: 'Produto encontrado',type: ProdutoEntity})
+    @ApiResponse({status: 200,description: 'Produto encontrado',type: ProdutoDto})
     async obterUm(@Param('id') id: number):Promise<any>
     {
         const produto = await this.produtosServices.obterUm(id);
@@ -52,8 +52,7 @@ export class ProdutosController{
 
     @Put()
     @ApiOperation({ summary: 'Altera um produto' })
-    async alterar(@Body() produto: ProdutoEntity): Promise<ProdutoEntity>{
-
+    async alterar(@Body() produto: ProdutoDto): Promise<ProdutoDto>{
         return this.produtosServices.alterar(produto);
     }
 }

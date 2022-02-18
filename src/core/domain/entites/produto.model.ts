@@ -1,12 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, DataType, Table } from "sequelize-typescript";
 import { Entity } from "src/core/base/entity";
 
 //@Table
 export class ProdutoEntity extends Entity{
 
-  //  @Column({type:DataType.STRING(60), allowNull:false})
-    @ApiProperty({ example: "LIV001"})
     codigo:string;
 
     //@Column({type: DataType.STRING, allowNull:false})

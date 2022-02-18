@@ -1,33 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/sequelize";
+
 import { Entity } from "src/core/base/entity";
 import { Repository } from "src/core/base/repository";
 
-@Injectable()
+
 export class RepositoryRemote<T extends Entity> extends Repository<T>{
-
     
-    criar(data: T): Promise<T> {
-        throw new Error("Method not implemented.");
-    }
-    alterar(data: T): Promise<T> {
-        throw new Error("Method not implemented.");
-    }
-    obterUm(id: number): Promise<T> {
-        throw new Error("Method not implemented.");
-    }
-    obterTodos(): Promise<T[]> {
-        throw new Error("Method not implemented.");
-    }
-    apagar(id: number): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-
-
-    /*constructor(
-        @InjectModel(T)
-        private repository : typeof T)
-    {
+    constructor(private repository : any){
         super();
     }
 
@@ -61,8 +39,8 @@ export class RepositoryRemote<T extends Entity> extends Repository<T>{
         return await this.criar(item);
     }
 
-    async apagar(item:T): Promise<void>{
-
-            this.repository.destroy({where: { id: item.id } });
-     }*/
+    apagar(id: number): Promise<void> {
+        this.repository.destroy({where: { id: id } });
+        return ;
+    }
 }

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { ProdutosController } from './application/produtos.controller';
+import { ProdutosController } from './application/controller/produtos.controller';
 import { ProdutosServices } from './services/produtos.service';
 import { ProdutoEntity } from './core/domain/entites/produto.model';
-import { ProdutoRepository } from './core/repositories/produto.repository';
 import { ProdutoRepositoryCacheMemory } from './data/cache-memory/produtoRepository-cache-memory';
+import { ProdutoRepository } from './data/remote/produto-repository';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { ProdutoRepositoryCacheMemory } from './data/cache-memory/produtoReposit
   ],
   controllers: [ProdutosController],
   providers: [{
-    provide: ProdutoRepository,
+    provide: ProdutoRepositoryCacheMemory,
     useClass: ProdutoRepositoryCacheMemory
   },
   ProdutosServices],
