@@ -1,16 +1,17 @@
 import { Sequelize } from "sequelize-typescript";
+import { ProdutoDto } from "../../shared/ProdutoDto";
 import { ProdutoEntity } from "../../core/domain/entites/produto.entity";
 
 const sequelize = new Sequelize({ validateOnly: true });
 sequelize.addModels([ProdutoEntity]);
 
-export const produtosLista: Array<ProdutoEntity> =[
-    new ProdutoEntity({codigo: "LV001", nome: "Livro C#", preco:15.90,qtde:100}),
-    new ProdutoEntity({codigo: "LV002", nome: "Livro Python", preco:25.90,qtde:100}),
-    new ProdutoEntity({codigo: "LV003", nome: "Livro PHP", preco:35.90,qtde:100}),
-    new ProdutoEntity({codigo: "LV004", nome: "Livro JavaScript", preco:40,qtde:100})
+export const produtosLista: Array<ProdutoDto> =[
+    new ProdutoDto(1, "LV001","Livro C#", 15.90,100),
+    new ProdutoDto(2, "LV002", "Livro Python", 25.90,100),
+    new ProdutoDto(3, "LV003", "Livro PHP", 35.90,100),
+    new ProdutoDto(4, "LV004", "Livro JavaScript", 40,100)
   ]
   
-  export const produtoNovo  = new ProdutoEntity({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde: 100});
-  export const produtoAlterar  = new ProdutoEntity({codigo: "LV006", nome: "Alterar Produto", preco:99.90,qtde: 100});
-  export const produtoApagar  = new ProdutoEntity({codigo: "LV007", nome: "Apagar Produto", preco:99.90,qtde: 100});
+  export const produtoNovo     = new ProdutoDto(null,"LV005", "Novo Produto", 99.90, 100);
+  export const produtoAlterar  = new ProdutoDto(2,"LV006", "Alterar Produto",99.90,100);
+  export const produtoApagar   = new ProdutoDto(4,"LV007", "Apagar Produto", 99.90,100);

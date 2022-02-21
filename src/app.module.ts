@@ -36,6 +36,6 @@ import { ProdutoRepository } from './core/repositories/produto.repository';
     SequelizeModule.forFeature([ProdutoEntity])
   ],
   controllers: [ProdutosController],
-  providers:   [ProdutosServices]
+  providers:   [ProdutosServices,ProdutoRepository]
 })
 export class AppModule {}
