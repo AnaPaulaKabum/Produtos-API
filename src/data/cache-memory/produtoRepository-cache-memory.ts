@@ -43,7 +43,6 @@ export class ProdutoRepositoryCacheMemory<TEntity extends Entity> extends Reposi
 
         // id seria posicao.
         this.items = this.items.splice(id);
-         console.log(this.items);
         return await firstValueFrom(of());
     }
 }

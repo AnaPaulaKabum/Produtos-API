@@ -1,6 +1,6 @@
 import { Mapper } from "src/core/base/mapper";
 import { ProdutoDto } from "src/shared/ProdutoDto";
-import { ProdutoEntity } from "../entites/produto.model";
+import { ProdutoEntity } from "../entites/produto.entity";
 
 
 export class ProdutoMapper extends Mapper<ProdutoDto, ProdutoEntity>{

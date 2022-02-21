@@ -10,18 +10,21 @@ CRUD de produtos utilizando NestJS [Nest](https://github.com/nestjs/nest).
 
 ## Organization 
 
-Presentation ➔ Use Cases ➔ Core ➔ Data
+Application ➔ Services ➔ Core ➔ Data
 
 src
+  - Application
+      - Controller: Recebem as requisições.
+  - Services
   - core
-      - base: toda classe de abstração e interface de modelo
-      - domain
-      - repositories
+      - base: toda classe de abstração e interface.
+      - domain: Entidades e Mappers
+      - repositories:
   - data
-  - infra
-  - shared: Criação de Enums, ou DTOs e Exception filters
-  - presentation
-  - use-cases
+      - cache-memory: Repositorio na memoria
+      - remote repositorio de banco de dados
+      - mock: repositorio para testes.
+  - shared: Criação de Enums, DTOs e Exception filters
 
 ## Installation
 

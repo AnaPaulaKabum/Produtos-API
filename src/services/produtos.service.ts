@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { ProdutoEntity } from "src/core/domain/entites/produto.model";
 import { ProdutoMapper } from "src/core/domain/mappers/ProdutoMappear";
 import { ProdutoRepositoryCacheMemory } from "src/data/cache-memory/produtoRepository-cache-memory";
+import { ProdutoRepository } from "src/data/remote/produto-repository";
 import { ProdutoDto } from "src/shared/ProdutoDto";
 
 
@@ -10,7 +10,7 @@ export class ProdutosServices{
 
     private produtoMapper: ProdutoMapper;
 
-    constructor(private readonly repository: ProdutoRepositoryCacheMemory<ProdutoEntity> ) {
+    constructor(private readonly repository: ProdutoRepository ) {
         this.produtoMapper = new ProdutoMapper();
     }
     
@@ -19,10 +19,11 @@ export class ProdutosServices{
         return await this.repository.obterTodos(); 
     }
    
-    async criar(produto :ProdutoDto):Promise<ProdutoDto>{
+    async criar(produtoDTO :ProdutoDto):Promise<ProdutoDto>{
 
-        const novoProduto = await this.repository.criar(this.produtoMapper.mapFrom(produto));
-         return  this.produtoMapper.mapTo(novoProduto);
+        const produto = await this.produtoMapper.mapFrom(produtoDTO);
+        const novoProduto = await this.repository.criar(produto);
+        return  this.produtoMapper.mapTo(novoProduto);
     }
 
     async obterUm(id:number):Promise<ProdutoDto>{
@@ -38,10 +39,8 @@ export class ProdutosServices{
 
      async alterar(produto: ProdutoDto): Promise<ProdutoDto>{
 
-        console.log('produtoDTO'+produto)
-        const alterarProduto = await this.repository.alterar(this.produtoMapper.mapFrom(produto));
-        console.log('alterarProduto'+alterarProduto)
-
+        const produtoAlterar = this.produtoMapper.mapFrom(produto);
+        const alterarProduto = await this.repository.alterar(produtoAlterar);
 
         return  this.produtoMapper.mapTo(alterarProduto); 
         

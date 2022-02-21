@@ -2,7 +2,7 @@ import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'sequelize-typescript';
 import { Sequelize } from 'sequelize-typescript/dist/sequelize/sequelize/sequelize';
-import { ProdutoEntity } from 'src/core/domain/entites/produto.model';
+import { ProdutoEntity } from 'src/core/domain/entites/produto.entity';
 import { ErrorResponse } from '../errorResponse';
 import { ProdutosServices } from '../services/produtos.service';
 
