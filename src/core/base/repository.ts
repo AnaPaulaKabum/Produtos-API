@@ -1,6 +1,3 @@
-import { Observable } from "rxjs";
-
-
 export abstract class Repository<T>{
 
     abstract criar(data: T): Promise<T>;

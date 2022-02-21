@@ -4,7 +4,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ProdutosController } from './application/controller/produtos.controller';
 import { ProdutosServices } from './services/produtos.service';
 import { ProdutoEntity } from './core/domain/entites/produto.entity';
-import { ProdutoRepository } from './data/remote/produto-repository';
+import { ProdutoRepository } from './core/repositories/produto.repository';
 
 @Module({
 

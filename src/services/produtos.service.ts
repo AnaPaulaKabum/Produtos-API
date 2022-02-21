@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ProdutoMapper } from "src/core/domain/mappers/ProdutoMappear";
-import { ProdutoRepositoryCacheMemory } from "src/data/cache-memory/produtoRepository-cache-memory";
-import { ProdutoRepository } from "src/data/remote/produto-repository";
+import { ProdutoRepository } from "src/core/repositories/produto.repository";
 import { ProdutoDto } from "src/shared/ProdutoDto";
 
 

@@ -4,7 +4,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { Repository } from "src/core/base/repository";
 
 @Injectable()
-export class ProdutoRepository extends Repository <ProdutoEntity>{
+export class ProdutoRepositoryBD extends Repository <ProdutoEntity>{
 
     constructor(@InjectModel(ProdutoEntity) private repository: typeof ProdutoEntity){
         super();
