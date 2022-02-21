@@ -1,7 +1,7 @@
-import { ProdutoEntity } from "src/core/domain/entites/produto.entity";
+import { ProdutoEntity } from "../../core/domain/entites/produto.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { Repository } from "src/core/base/repository";
+import { Repository } from "../../core/base/repository";
 
 @Injectable()
 export class ProdutoRepositoryBD extends Repository <ProdutoEntity>{

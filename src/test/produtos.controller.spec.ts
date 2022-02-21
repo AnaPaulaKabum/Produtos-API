@@ -1,23 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Sequelize } from 'sequelize-typescript/dist/sequelize/sequelize/sequelize';
+import { ProdutoEntity } from '../core/domain/entites/produto.entity';
 import { ErrorResponse } from '../errorResponse';
-import { Produto } from './produto.model';
-import { ProdutosController } from '../presentation/produtos.controller';
 import { ProdutosServices } from '../services/produtos.service';
-
-const sequelize = new Sequelize({ validateOnly: true });
-sequelize.addModels([Produto]);
-
-const produtosLista: Array<Produto> =[
-  new Produto({codigo: "LV001", nome: "Livro C#", preco:15.90,qtde:100}),
-  new Produto({codigo: "LV002", nome: "Livro Python", preco:25.90,qtde:100}),
-  new Produto({codigo: "LV003", nome: "Livro PHP", preco:35.90,qtde:100}),
-  new Produto({codigo: "LV004", nome: "Livro JavaScript", preco:40,qtde:100})
-]
-
-const produtoNovo  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde: 100});
-const produtoAlterar  = new Produto({codigo: "LV006", nome: "Alterar Produto", preco:99.90,qtde: 100});
-const produtoApagar  = new Produto({codigo: "LV007", nome: "Apagar Produto", preco:99.90,qtde: 100});
+import {produtosLista,produtoNovo,produtoAlterar,produtoApagar} from '../data/mock/produto.mock';
+import { ProdutosController } from '../application/controller/produtos.controller';
 
 describe('ProdutosController', () => {
 
@@ -50,6 +36,7 @@ describe('ProdutosController', () => {
 
       //ACT = o que gostaria de testar;
       const resultado = await produtosController.obterTodos();
+
 
      //Assert realiza o teste
       expect(resultado).toEqual(produtosLista);
@@ -93,7 +80,7 @@ describe('ProdutosController', () => {
     it('Criar um Produto"', async () => {
 
       //Arrange = Atribuição de um objeto.
-      const body = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
+      const body = new ProdutoEntity({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
 
       //ACT = o que gostaria de testar;
       const resultado = await produtosController.criar(body);
@@ -108,7 +95,7 @@ describe('ProdutosController', () => {
   describe('alterar', () => {
     it('Alterar um Produto"', async () => {
 
-      const body  = new Produto({codigo: "LV005", nome: "Alterar Produto", preco:99.90});
+      const body  = new ProdutoEntity({codigo: "LV005", nome: "Alterar Produto", preco:99.90});
 
       const resultado = await produtosController.alterar(body);
 

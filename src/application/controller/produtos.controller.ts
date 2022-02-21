@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param,Post, Put } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ProdutosServices } from "src/services/produtos.service";
-import { ProdutoDto } from "src/shared/ProdutoDto";
+import { ProdutosServices } from "../../services/produtos.service";
+import { ProdutoDto } from "../../shared/ProdutoDto";
 import { ErrorResponse } from "../../errorResponse";
 
 @Controller('produtos')
@@ -20,7 +20,6 @@ export class ProdutosController{
     @ApiOperation({ summary: 'Cria um novo produto' })
     async criar(@Body() produto: ProdutoDto):Promise <ProdutoDto>{
          return await this.produtosServices.criar(produto);
-         
     }
 
     @Get(':id')
@@ -30,11 +29,11 @@ export class ProdutosController{
     {
         const produto = await this.produtosServices.obterUm(id);
 
-        //if (produto){
+        if (produto){
             return produto;
-        //}
+        }
 
-       // return new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${id}`);
+       return new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${id}`);
     }
 
     @Delete(':id')
@@ -42,12 +41,12 @@ export class ProdutosController{
     async apagar(@Param('id') id: number):Promise<any> {
 
        const produto = await this.produtosServices.obterUm(id);
-      //  if (produto){
+        if (produto){
             await this.produtosServices.apagar(produto);
             return ;           
-      //  }  
+        }  
         
-       // return new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${id}`);
+        return new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${id}`);
     }
 
     @Put()

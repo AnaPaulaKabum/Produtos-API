@@ -1,23 +1,10 @@
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'sequelize-typescript';
-import { Sequelize } from 'sequelize-typescript/dist/sequelize/sequelize/sequelize';
-import { ProdutoEntity } from 'src/core/domain/entites/produto.entity';
+import { ProdutoEntity } from '../core/domain/entites/produto.entity';
 import { ErrorResponse } from '../errorResponse';
 import { ProdutosServices } from '../services/produtos.service';
-
-const sequelize = new Sequelize({ validateOnly: true });
-sequelize.addModels([ProdutoEntity]);
-
-const produtosLista: Array<ProdutoEntity> =[
-  new ProdutoEntity({codigo: "LV001", nome: "Livro C#", preco:15.90, qtde:100}),
-  new ProdutoEntity({codigo: "LV002", nome: "Livro Python", preco:25.90,qtde:100}),
-  new ProdutoEntity({codigo: "LV003", nome: "Livro PHP", preco:35.90,qtde:100}),
-  new ProdutoEntity({codigo: "LV004", nome: "Livro JavaScript", preco:40,qtde:100})
-]
-
-const produtoNovo  = new ProdutoEntity({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
-const produtoAlterar  = [2,[new ProdutoEntity({codigo: "LV003", nome: "Alterar Produto", preco:99.90,qtde:100})]];
+import {produtosLista,produtoNovo,produtoAlterar,produtoApagar} from '../data/mock/produto.mock';
 
 describe('ProdutosService', () => {
 
@@ -70,7 +57,7 @@ describe('ProdutosService', () => {
     it('Criar um Produto"', async () => {
 
       //Arrange = Atribuição de um objeto.
-      const body = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90});
+      const body = new ProdutoEntity({codigo: "LV005", nome: "Novo Produto", preco:99.90});
 
       //ACT = o que gostaria de testar;
       const resultado = await produtosService.criar(body);
@@ -83,7 +70,7 @@ describe('ProdutosService', () => {
   describe('alterar', () => {
     it('Alterar um Produto"', async () => {
 
-      const body = new Produto({codigo: "LV003", nome: "Alterar Produto", preco:99.90,qtde:100});
+      const body = new ProdutoEntity({codigo: "LV003", nome: "Alterar Produto", preco:99.90,qtde:100});
 
       const resultado = await produtosService.alterar(body);
 
@@ -92,7 +79,7 @@ describe('ProdutosService', () => {
 
     it('Ao tentar alterar um Produto, não devera encontrar e deve criar."', async () => {
 
-      const body  = new Produto({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
+      const body  = new ProdutoEntity({codigo: "LV005", nome: "Novo Produto", preco:99.90, qtde:100});
 
       jest.spyOn(produtoRepositorio, 'update').mockResolvedValueOnce([0,[]])
 
@@ -106,7 +93,7 @@ describe('ProdutosService', () => {
   describe('Apagar', () => {
     it('Deletar um Produto"', async () => {
 
-      const produtoApagar  = new Produto({id: 5,codigo: "LV005", nome: "Novo Produto", preco:99.90,qtde:0});
+      const produtoApagar  = new ProdutoEntity({id: 5,codigo: "LV005", nome: "Novo Produto", preco:99.90,qtde:0});
 
       const resultado = await produtosService.apagar(produtoApagar);
       expect(resultado).toEqual(produtoApagar.id);
@@ -115,7 +102,7 @@ describe('ProdutosService', () => {
 
     it('Mensagem de erro ao tentar deletar um produto"', async () => {
 
-      const produtoApagar  = new Produto({id: 5,codigo: "LV005", nome: "Novo Produto", preco:99.90,qtde:100});
+      const produtoApagar  = new ProdutoEntity({id: 5,codigo: "LV005", nome: "Novo Produto", preco:99.90,qtde:100});
       const errorResponse = new ErrorResponse(102, `Nao e possivel deletar um produto com quantidade ${produtoApagar.id}`);
 
       const resultado = await produtosService.apagar(produtoApagar);

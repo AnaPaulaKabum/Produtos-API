@@ -1,5 +1,5 @@
-import { Mapper } from "src/core/base/mapper";
-import { ProdutoDto } from "src/shared/ProdutoDto";
+import { Mapper } from "../../../core/base/mapper";
+import { ProdutoDto } from "../../../shared/ProdutoDto";
 import { ProdutoEntity } from "../entites/produto.entity";
 
 
