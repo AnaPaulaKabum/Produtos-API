@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ErrorResponse } from '../errorResponse';
-import { ProdutosServices } from '../services/produtos.service';
-import { produtosLista,produtoNovo,produtoAlterar} from '../data/mock/produto.mock';
-import { ProdutosController } from '../application/controller/produtos.controller';
+import { ErrorResponse } from '../../errorResponse';
+import { ProdutosServices } from '../../services/produtos.service';
+import { ProdutosController } from './produtos.controller';
+import { produtoAlterar, produtoNovo, produtosLista } from '../../database/mock/produto.mock';
 
 describe('ProdutosController', () => {
 

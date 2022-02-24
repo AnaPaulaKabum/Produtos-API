@@ -1,10 +1,9 @@
-import { Mapper } from "../../../core/base/mapper";
-import { ProdutoDto } from "../../../shared/ProdutoDto";
-import { ProdutoEntity } from "../entites/produto.entity";
 
+import { ProdutoDto } from "../../../shared/ProdutoDto";
+import { Mapper } from "../../../core/base/mapper";
+import { ProdutoEntity } from "../entity/produto.entity";
 
 export class ProdutoMapper extends Mapper<ProdutoDto, ProdutoEntity>{
-
 
     public mapFrom(data: ProdutoDto): ProdutoEntity {
 

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, DataType, Table } from "sequelize-typescript";
-import { Entity } from "../../base/entity";
+import { Entity } from "../../../core/base/entity";
 
 @Table ({modelName:"Produto"})
 export class ProdutoEntity extends Entity{

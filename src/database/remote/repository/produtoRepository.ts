@@ -1,12 +1,12 @@
-import { ProdutoEntity } from "../../core/domain/entites/produto.entity";
+import { ProdutoEntity } from "../entity/produto.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { Repository } from "../../core/base/repository";
-import { ProdutoDto } from "../../shared/ProdutoDto";
-import { ProdutoMapper } from "../../core/domain/mappers/ProdutoMappear";
+import { Repository } from "../../../core/base/repository";
+import { ProdutoDto } from "../../../shared/ProdutoDto";
+import { ProdutoMapper } from "../mappear/produtoMappear";
 
 @Injectable()
-export class ProdutoRepositoryBD extends Repository <ProdutoDto>{
+export class ProdutoRepository extends Repository <ProdutoDto>{
 
     //conexão com o banco
     constructor(@InjectModel(ProdutoEntity) private repository: typeof ProdutoEntity,

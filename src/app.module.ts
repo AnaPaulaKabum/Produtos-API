@@ -3,9 +3,9 @@ import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ProdutosController } from './application/controller/produtos.controller';
 import { ProdutosServices } from './services/produtos.service';
-import { ProdutoEntity } from './core/domain/entites/produto.entity';
-import { ProdutoRepository } from './core/repositories/produto.repository';
-import { ProdutoMapper } from './core/domain/mappers/ProdutoMappear';
+import { ProdutoEntity } from './database/remote/entity/produto.entity';
+import { ProdutoRepository } from './database/remote/repository/produtoRepository';
+import { ProdutoMapper } from './database/remote/mappear/produtoMappear';
 
 @Module({
 

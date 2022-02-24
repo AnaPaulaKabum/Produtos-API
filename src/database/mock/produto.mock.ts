@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
 import { ProdutoDto } from "../../shared/ProdutoDto";
-import { ProdutoEntity } from "../../core/domain/entites/produto.entity";
+import { ProdutoEntity } from "../remote/entity/produto.entity";
 
 const sequelize = new Sequelize({ validateOnly: true });
 sequelize.addModels([ProdutoEntity]);
