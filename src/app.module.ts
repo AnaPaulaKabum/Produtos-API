@@ -5,6 +5,7 @@ import { ProdutosController } from './application/controller/produtos.controller
 import { ProdutosServices } from './services/produtos.service';
 import { ProdutoEntity } from './core/domain/entites/produto.entity';
 import { ProdutoRepository } from './core/repositories/produto.repository';
+import { ProdutoMapper } from './core/domain/mappers/ProdutoMappear';
 
 @Module({
 
@@ -36,6 +37,6 @@ import { ProdutoRepository } from './core/repositories/produto.repository';
     SequelizeModule.forFeature([ProdutoEntity])
   ],
   controllers: [ProdutosController],
-  providers:   [ProdutosServices,ProdutoRepository]
+  providers:   [ProdutosServices,ProdutoRepository,ProdutoMapper],
 })
 export class AppModule {}

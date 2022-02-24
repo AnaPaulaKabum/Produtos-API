@@ -2,36 +2,49 @@ import { ProdutoEntity } from "../../core/domain/entites/produto.entity";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { Repository } from "../../core/base/repository";
+import { ProdutoDto } from "../../shared/ProdutoDto";
+import { ProdutoMapper } from "../../core/domain/mappers/ProdutoMappear";
 
 @Injectable()
-export class ProdutoRepositoryBD extends Repository <ProdutoEntity>{
+export class ProdutoRepositoryBD extends Repository <ProdutoDto>{
 
     //conexão com o banco
-    constructor(@InjectModel(ProdutoEntity) private repository: typeof ProdutoEntity){
+    constructor(@InjectModel(ProdutoEntity) private repository: typeof ProdutoEntity,
+    private mappear: ProdutoMapper){
         super();
     }
 
-    async obterTodos():Promise<ProdutoEntity[]>{
+    async obterTodos():Promise<ProdutoDto[]>{
 
-        return  this.repository.findAll();
+        const produtos = await this.repository.findAll();
+
+        let resultado = [];
+        for(let i = 0; i < produtos.length; i = i + 1 ) {
+            resultado.push(this.mappear.mapTo(produtos[i]));
+        }
+
+        return  resultado;
     }
 
-    async obterUm(id:number):Promise<ProdutoEntity>{
+    async obterUm(id:number):Promise<ProdutoDto>{
 
-        return this.repository.findByPk(id);
+        const resultado = await this.repository.findByPk(id);
+        return this.mappear.mapTo(resultado);
     }
 
-    async criar(data: ProdutoEntity):Promise<ProdutoEntity>{
+    async criar(data: ProdutoDto):Promise<ProdutoDto>{
 
-        return await this.repository.create(
+        const resultado =  await this.repository.create(
             {id:data.id,
             codigo:data.codigo,
             nome:data.nome,
             preco:data.preco,
             qtde:data.qtde}); 
+
+        return this.mappear.mapTo(resultado);
     }
 
-    async alterar(data: ProdutoEntity): Promise<ProdutoEntity>{
+    async alterar(data: ProdutoDto): Promise<ProdutoDto>{
 
         const resultado = await this.repository.update<ProdutoEntity>({id:data.id,
             codigo:data.codigo,
@@ -44,7 +57,7 @@ export class ProdutoRepositoryBD extends Repository <ProdutoEntity>{
                         } 
         });
            
-     if (resultado[0] > 0){
+    if (resultado[0] > 0){
 
          return data;
      }

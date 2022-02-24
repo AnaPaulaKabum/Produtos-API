@@ -1,17 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { ProdutoMapper } from "../core/domain/mappers/ProdutoMappear";
 import { ProdutoRepository } from "../core/repositories/produto.repository";
-import { ProdutoDto } from "src/shared/ProdutoDto";
+import { ProdutoDto } from "../shared/ProdutoDto";
 
 @Injectable()
 export class ProdutosServices{
 
-    private produtoMapper: ProdutoMapper;
-
-    //retirar o map daqui e colocar no repository.
-    constructor(private readonly repository: ProdutoRepository ) {
-        this.produtoMapper = new ProdutoMapper();
-    }
+    constructor(private readonly repository: ProdutoRepository ) {};
     
     async obterTodos(): Promise<ProdutoDto[]>{ 
 
@@ -19,16 +13,13 @@ export class ProdutosServices{
     }
    
     async criar(produtoDTO :ProdutoDto):Promise<ProdutoDto>{
-
-        const produto = await this.produtoMapper.mapFrom(produtoDTO);
-        const novoProduto = await this.repository.criar(produto);
-        return  this.produtoMapper.mapTo(novoProduto);
+        
+        return  this.repository.criar(produtoDTO);
     }
 
     async obterUm(id:number):Promise<ProdutoDto>{
 
-        const consultaProduto = await this.repository.obterUm(id);
-        return  this.produtoMapper.mapTo(consultaProduto);       
+        return await this.repository.obterUm(id);            
     }
 
     async apagar(produto:ProdutoDto): Promise<any>{
@@ -38,9 +29,6 @@ export class ProdutosServices{
 
      async alterar(produto: ProdutoDto): Promise<ProdutoDto>{
 
-        const produtoAlterar = this.produtoMapper.mapFrom(produto);
-        const alterarProduto = await this.repository.alterar(produtoAlterar);
-
-        return  this.produtoMapper.mapTo(alterarProduto); 
+        return await this.repository.alterar(produto);
      } 
 }
