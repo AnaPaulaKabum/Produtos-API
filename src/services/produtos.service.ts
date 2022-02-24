@@ -3,12 +3,12 @@ import { ProdutoMapper } from "../core/domain/mappers/ProdutoMappear";
 import { ProdutoRepository } from "../core/repositories/produto.repository";
 import { ProdutoDto } from "src/shared/ProdutoDto";
 
-
 @Injectable()
 export class ProdutosServices{
 
     private produtoMapper: ProdutoMapper;
 
+    //retirar o map daqui e colocar no repository.
     constructor(private readonly repository: ProdutoRepository ) {
         this.produtoMapper = new ProdutoMapper();
     }
@@ -42,6 +42,5 @@ export class ProdutosServices{
         const alterarProduto = await this.repository.alterar(produtoAlterar);
 
         return  this.produtoMapper.mapTo(alterarProduto); 
-        
      } 
 }

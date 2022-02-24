@@ -6,6 +6,7 @@ import { Repository } from "../../core/base/repository";
 @Injectable()
 export class ProdutoRepositoryBD extends Repository <ProdutoEntity>{
 
+    //conexão com o banco
     constructor(@InjectModel(ProdutoEntity) private repository: typeof ProdutoEntity){
         super();
     }

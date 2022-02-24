@@ -24,7 +24,10 @@ src
       - cache-memory: Repositorio na memoria
       - remote repositorio de banco de dados
       - mock: repositorio para testes.
-  - shared: Criação de Enums, DTOs e Exception filters
+  
+  - shared: Criação de Enums, DTOs e Exception filters (Podendo ser vistas pela camada de Application,Services)
+
+
 
 ## Installation
 
