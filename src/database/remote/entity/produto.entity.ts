@@ -1,22 +1,25 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, DataType, Table } from "sequelize-typescript";
-import { Entity } from "../../../core/base/entity";
+import { Entity as EntityClass } from "../../../core/base/entity";
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Table ({modelName:"Produto"})
-export class ProdutoEntity extends Entity{
+@Entity({name:"produto"})
+export class ProdutoEntity extends EntityClass{
 
-    @Column({type: DataType.STRING,allowNull:false})  
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({nullable:false})  
     codigo:string;
 
-    @Column({type: DataType.STRING,allowNull:false})
+    @Column({nullable:false})
     @ApiProperty({ example: "Livro NestJS"})
     nome:string;
 
-    @Column({ type: DataType.DECIMAL,allowNull:false})
+    @Column({nullable:false})  
     @ApiProperty({ example: 19.99})
     preco:number;
 
-    @Column({ type: DataType.INTEGER,allowNull:false})
+    @Column({nullable:false})  
     @ApiProperty({ example: 100})
     qtde:number;
 }

@@ -1,22 +1,26 @@
 import { ProdutoEntity } from "../entity/produto.entity";
+import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/sequelize";
-import { Repository } from "../../../core/base/repository";
+import { Repository as IRepositorio} from "../../../core/base/repository";
 import { ProdutoDto } from "../../../shared/ProdutoDto";
 import { ProdutoMapper } from "../mappear/produtoMappear";
+import { EntityRepository, Repository } from "typeorm";
 
-@Injectable()
-export class ProdutoRepository extends Repository <ProdutoDto>{
+@EntityRepository(ProdutoEntity)
+export class ProdutoRepository extends Repository<ProdutoEntity> implements IRepositorio <ProdutoDto>{
+
+    private mappear: ProdutoMapper
 
     //conexão com o banco
-    constructor(@InjectModel(ProdutoEntity) private repository: typeof ProdutoEntity,
-    private mappear: ProdutoMapper){
+    constructor(){
         super();
+        this.mappear = new ProdutoMapper();
     }
 
     async obterTodos():Promise<ProdutoDto[]>{
 
-        const produtos = await this.repository.findAll();
+        const produtos = await this.query(`select * from produto`);
+       // this.c
 
         let resultado = [];
         for(let i = 0; i < produtos.length; i = i + 1 ) {
@@ -28,45 +32,37 @@ export class ProdutoRepository extends Repository <ProdutoDto>{
 
     async obterUm(id:number):Promise<ProdutoDto>{
 
-        const resultado = await this.repository.findByPk(id);
-        return this.mappear.mapTo(resultado);
+        const resultado = await this.find({where: [{id:id}]})
+        return this.mappear.mapTo(resultado[0]);
     }
 
     async criar(data: ProdutoDto):Promise<ProdutoDto>{
 
-        const resultado =  await this.repository.create(
-            {id:data.id,
-            codigo:data.codigo,
-            nome:data.nome,
-            preco:data.preco,
-            qtde:data.qtde}); 
+        let produtoEnt = this.mappear.mapFrom(data);
 
+        let resultado =  await this.save(produtoEnt);
         return this.mappear.mapTo(resultado);
     }
 
     async alterar(data: ProdutoDto): Promise<ProdutoDto>{
 
-        const resultado = await this.repository.update<ProdutoEntity>({id:data.id,
-            codigo:data.codigo,
-            nome:data.nome,
-            preco:data.preco,
-            qtde:data.qtde},
-            {
-                where: {
-                         id: data.id
-                        } 
-        });
-           
-    if (resultado[0] > 0){
+        const result = await this.findOne({id:data.id});
 
-         return data;
-     }
+        result.codigo = data.codigo;
+        result.nome = data.nome;
+        result.preco = data.preco;
+        result.qtde = data.qtde;
 
-     return new ProdutoEntity();
+        await this.save(result);
+
+        return result;
     }
 
-    apagar(id: number): Promise<void> {
-        this.repository.destroy({where: { id: id } });
+    async apagar(id: number): Promise<void> {
+
+        const resultado = await this.findOne({id:id});
+
+        this.delete(resultado);
         return ;
     }
 }

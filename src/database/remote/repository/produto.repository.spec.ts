@@ -1,4 +1,4 @@
-import { Type } from '@nestjs/common';
+/*mport { Type } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Repository } from 'sequelize-typescript';
@@ -20,10 +20,10 @@ describe('ProdutosService', () => {
         { provide: getModelToken(ProdutoEntity),
         useValue:{
           findAll: jest.fn().mockResolvedValue(produtosLista)
-         /* findByPk: jest.fn(),
+         findByPk: jest.fn(),
           create: jest.fn(),
           update: jest.fn(),
-          destroy: jest.fn()*/
+          destroy: jest.fn()
         }
       }
     ],
@@ -44,4 +44,4 @@ describe('ProdutosService', () => {
     });
   });
 
-});
+});*/

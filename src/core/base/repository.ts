@@ -1,8 +1,8 @@
-export abstract class Repository<T>{
+export interface Repository<T>{
 
-    abstract criar(data: T): Promise<T>;
-    abstract alterar(data: T): Promise<T>;
-    abstract obterUm(id: number): Promise<T>;
-    abstract obterTodos(): Promise<T[]>;
-    abstract apagar(id: number): Promise<void>;
+     criar(data: T): Promise<T>;
+     alterar(data: T): Promise<T>;
+     obterUm(id: number): Promise<T>;
+     obterTodos(): Promise<T[]>;
+     apagar(id: number): Promise<void>;
 }

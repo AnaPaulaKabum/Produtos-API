@@ -1,6 +1,6 @@
-import { Model } from "sequelize-typescript";
 
+export class Entity { 
 
-export class Entity extends Model { 
+    id?:number;
     
 }

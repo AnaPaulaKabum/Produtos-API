@@ -1,13 +1,12 @@
-import { firstValueFrom, Observable, of } from "rxjs";
+import { firstValueFrom,  of } from "rxjs";
 import { Entity } from "src/core/base/entity";
 import { Repository } from "src/core/base/repository";
 
-export class ProdutoRepositoryCacheMemory<TEntity extends Entity> extends Repository<TEntity>{
+export class ProdutoRepositoryCacheMemory<TEntity extends Entity> implements Repository<TEntity>{
 
     protected items: TEntity[];
 
     constructor() {
-        super();
         this.items = [];
     }
 
