@@ -1,6 +1,6 @@
 import { ProdutoEntity } from "../entity/produto.entity";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { Repository as IRepositorio} from "../../../core/base/repository";
 import { ProdutoDto } from "../../../shared/ProdutoDto";
 import { ProdutoMapper } from "../mappear/produtoMappear";
@@ -11,7 +11,6 @@ export class ProdutoRepository extends Repository<ProdutoEntity> implements IRep
 
     private mappear: ProdutoMapper
 
-    //conexão com o banco
     constructor(){
         super();
         this.mappear = new ProdutoMapper();
@@ -19,12 +18,17 @@ export class ProdutoRepository extends Repository<ProdutoEntity> implements IRep
 
     async obterTodos():Promise<ProdutoDto[]>{
 
-        const produtos = await this.query(`select * from produto`);
-       // this.c
-
         let resultado = [];
-        for(let i = 0; i < produtos.length; i = i + 1 ) {
-            resultado.push(this.mappear.mapTo(produtos[i]));
+
+        try {
+            const produtos = await this.query(`select * from produto`);
+    
+            for(let i = 0; i < produtos.length; i = i + 1 ) {
+                resultado.push(this.mappear.mapTo(produtos[i]));
+            }
+            
+        } catch (error) {
+            throw new InternalServerErrorException(error);
         }
 
         return  resultado;
@@ -32,37 +36,64 @@ export class ProdutoRepository extends Repository<ProdutoEntity> implements IRep
 
     async obterUm(id:number):Promise<ProdutoDto>{
 
-        const resultado = await this.find({where: [{id:id}]})
-        return this.mappear.mapTo(resultado[0]);
+        const resultado = await this.findOne({where: [{id:id}]})
+
+        if (!resultado){
+
+            throw new NotFoundException(`Produto ${id} não foi encontrado`);
+        }
+
+        return this.mappear.mapTo(resultado);
     }
 
     async criar(data: ProdutoDto):Promise<ProdutoDto>{
 
-        let produtoEnt = this.mappear.mapFrom(data);
+        const resultadoConsulta = await this.findOne({where: [{codigo:data.codigo}]})
 
+        if (resultadoConsulta){
+            throw new Error(`Produto encontra-se no sistema com o id ${resultadoConsulta.id}`)
+        }
+
+        let produtoEnt = this.mappear.mapFrom(data);
         let resultado =  await this.save(produtoEnt);
+
         return this.mappear.mapTo(resultado);
     }
 
     async alterar(data: ProdutoDto): Promise<ProdutoDto>{
 
-        const result = await this.findOne({id:data.id});
+        const resultado = await this.findOne({id:data.id});
 
-        result.codigo = data.codigo;
-        result.nome = data.nome;
-        result.preco = data.preco;
-        result.qtde = data.qtde;
+        if (!resultado){
 
-        await this.save(result);
+            throw new NotFoundException(`Produto ${data.id} não foi encontrado`);
+        }
 
-        return result;
+        resultado.codigo = data.codigo;
+        resultado.nome = data.nome;
+        resultado.preco = data.preco;
+        resultado.qtde = data.qtde;
+
+        await this.save(resultado);
+
+        return resultado;
     }
 
     async apagar(id: number): Promise<void> {
 
-        const resultado = await this.findOne({id:id});
+        try {           
+            const resultado = await this.findOne({id:id});
 
-        this.delete(resultado);
+            if (!resultado){
+                throw new NotFoundException(`Produto ${id} não foi encontrado`);
+            }
+
+            await this.delete(resultado);
+
+        } catch (error) {
+            throw new InternalServerErrorException(error);
+        }
+        
         return ;
     }
 }

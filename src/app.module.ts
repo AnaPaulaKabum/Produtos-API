@@ -40,5 +40,3 @@ imports: [
   providers:   [ProdutosServices,ProdutoMapper],
 })
 export class AppModule {}
-
-console.log(process.env.HOST)

@@ -74,7 +74,8 @@
     "coveragePathIgnorePatterns": [
       "app.module.ts",
       "main.ts",
-      "errorResponse.ts"
+      "errorResponse.ts",
+      "produtoRepository-cache-memory.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

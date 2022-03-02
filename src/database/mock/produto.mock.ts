@@ -1,9 +1,5 @@
-import { Sequelize } from "sequelize-typescript";
 import { ProdutoDto } from "../../shared/ProdutoDto";
 import { ProdutoEntity } from "../remote/entity/produto.entity";
-
-//const sequelize = new Sequelize({ validateOnly: true });
-//sequelize.addModels([ProdutoEntity]);
 
 export const produtosLista: Array<ProdutoDto> =[
     { id:1, codigo:"LV001", nome: "Livro C#", preco: 15.90, qtde:100} as ProdutoDto ,
@@ -13,6 +9,16 @@ export const produtosLista: Array<ProdutoDto> =[
   ]
   
   export const produtoNovo     =  {codigo:"LV005", nome: "Novo Produto", preco: 99.90, qtde:100} as ProdutoDto ;
-  export const produtoAlterar  =  {codigo:"LV006", nome: "Alterar Produto", preco: 99.90, qtde:100} as ProdutoDto ;
+  export const produtoAlterar  =  {id:1,codigo:"LV006", nome: "Alterar Produto", preco: 99.90, qtde:100} as ProdutoDto ;
   export const produtoApagar   =  {codigo:"LV007", nome: "Apagar Produto", preco: 99.90, qtde:100} as ProdutoDto ;
 
+
+  export const produtosListaEntity: Array<ProdutoEntity> =[
+    { id:1, codigo:"LV001", nome: "Livro C#", preco: 15.90, qtde:100} as ProdutoEntity ,
+    { id:2, codigo:"LV002", nome: "Livro Python", preco: 25.90, qtde:100} as ProdutoEntity ,
+    { id:3, codigo:"LV003", nome: "Livro PHP", preco: 35.90, qtde:100} as ProdutoEntity ,
+    { id:4, codigo:"LV004", nome: "Livro JavaScript", preco: 40, qtde:100} as ProdutoEntity 
+  ]
+
+  export const produtoCadastrado = {id:1, codigo:"LV006", nome: "Alterar Produto", preco: 99.90, qtde:100} as ProdutoEntity;
+  export const produtoCriado     = {id:5, codigo:"LV005", nome: "Produto Criado ", preco: 99.90, qtde:100} as ProdutoEntity ;
