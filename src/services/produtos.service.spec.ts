@@ -3,7 +3,7 @@ import { ErrorResponse } from '../errorResponse';
 import { ProdutosServices } from './produtos.service';
 import {produtosLista,produtoNovo,produtoAlterar,produtoApagar} from '../database/mock/produto.mock';
 import { ProdutoRepository } from '../database/remote/repository/produtoRepository';
-
+import { InternalServerErrorException } from '@nestjs/common/exceptions';
 
 describe('ProdutosService', () => {
 
@@ -30,7 +30,19 @@ describe('ProdutosService', () => {
   });
 
   describe('obterTodos()', () => {
-    it('Retorna todos os produtos"', async () => {
+
+    it('Se o Repository falhar, deverá retornar um throw', async () => {
+
+      jest.spyOn(produtoRepositorio,'obterTodos').mockRejectedValue(new InternalServerErrorException());
+      await expect(produtosService.obterTodos()).rejects.toThrow(new InternalServerErrorException());
+    });
+
+    it('Não deve lançar excessão se o repositorio retornar. ', async () => {
+
+      await expect(produtosService.obterTodos()).resolves.not.toThrow();
+    })
+
+    it('Retorna todos os produtos', async () => {
 
       const resultado = await produtosService.obterTodos();
       expect(resultado).toEqual(produtosLista);
@@ -38,12 +50,24 @@ describe('ProdutosService', () => {
   });
 
   describe('obterUm()', () => {
-    it('Deve retorna apenas um produto"', async () => {
+    it('Deve retorna apenas um produto', async () => {
 
       const pos = 0;
       const resultado = await produtosService.obterUm(pos);
-
       expect(resultado).toEqual(produtosLista[pos]);
+    });
+
+    it('Deverá passar o mesmo retorno do services para o repositorio. ', async () => {
+
+      const id = 1;
+      await produtosService.obterUm(id);
+      expect(produtoRepositorio.obterUm).toBeCalledWith(id);
+     });
+
+     it('Não deve lançar excessão se o repositorio retornar. ', async () => {
+
+      const id = 1;
+      await expect(produtosService.obterUm(id)).resolves.not.toThrow();
     });
   });
 
@@ -51,8 +75,18 @@ describe('ProdutosService', () => {
     it('Criar um Produto()', async () => {
 
       const resultado = await produtosService.criar(produtoNovo);
-
       expect(resultado).toEqual(produtoNovo);
+    });
+
+    it('Deverá passar o mesmo retorno do services para o repositorio. ', async () => {
+
+      await produtosService.criar(produtoNovo);
+      expect(produtoRepositorio.criar).toBeCalledWith(produtoNovo);
+     });
+
+     it('Não deve lançar excessão se o repositorio retornar. ', async () => {
+       
+      await expect(produtosService.criar(produtoNovo)).resolves.not.toThrow();
     });
   });
 
@@ -65,17 +99,16 @@ describe('ProdutosService', () => {
       expect(resultado.id).toEqual(produtoAlterar.id);
     });
 
-   /* it('Ao tentar alterar um Produto, não devera encontrar e deve criar."', async () => {
+    it('Deverá passar o mesmo retorno do services para o repositorio. ', async () => {
 
-      const body  = new ProdutoDto(null,"LV005", "Novo Produto", 99.90, 100);
+      await produtosService.alterar(produtoAlterar);
+      expect(produtoRepositorio.alterar).toBeCalledWith(produtoAlterar);
+     });
 
-      jest.spyOn(produtoRepositorio, 'alterar').mockResolvedValueOnce({})
-
-      const resultado = await produtosService.alterar(body);
-
-      expect(resultado).toEqual(produtoNovo);
-
-    });*/
+     it('Não deve lançar excessão se o repositorio retornar. ', async () => {
+       
+      await expect(produtosService.alterar(produtoAlterar)).resolves.not.toThrow();
+    });
   });
 
   describe('Apagar', () => {
@@ -86,13 +119,15 @@ describe('ProdutosService', () => {
       expect(produtoRepositorio.apagar).toHaveBeenCalled;
     });
 
-    /*it('Mensagem de erro ao tentar deletar um produto"', async () => {
+    it('Deverá passar o mesmo retorno do services para o repositorio. ', async () => {
 
-      const produtoApagar  = new ProdutoDto(4,"LV007", "Apagar Produto", 99.90,100);
-      const errorResponse = new ErrorResponse(102, `Nao e possivel deletar um produto com quantidade ${produtoApagar.id}`);
+      await produtosService.apagar(produtoApagar);
+      expect(produtoRepositorio.apagar).toBeCalledWith(produtoApagar.id);
+     });
 
-      const resultado = await produtosService.apagar(produtoApagar);
-      expect(resultado).toEqual(errorResponse);
-    });*/
+     it('Não deve lançar excessão se o repositorio retornar. ', async () => {
+       
+      await expect(produtosService.apagar(produtoApagar)).resolves.not.toThrow();
+    });
   });
 });
