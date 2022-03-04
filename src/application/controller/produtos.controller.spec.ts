@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ErrorResponse } from '../../errorResponse';
 import { ProdutosServices } from '../../services/produtos.service';
 import { ProdutosController } from './produtos.controller';
-import { produtoAlterar, produtoNovo, produtosLista } from '../../database/mock/produto.mock';
+import { paramId, produtoAlterar, produtoNovo, produtosLista } from '../../database/mock/produto.mock';
+import { NotFoundException } from '@nestjs/common';
 
 describe('ProdutosController', () => {
 
@@ -55,36 +56,29 @@ describe('ProdutosController', () => {
   describe('obterUm()', () => {
     it('Deve retorna um produto pelo id', async () => {
 
-      const id = 0;
-      const result = await produtosController.obterUm(id);
+      const result = await produtosController.obterUm(paramId);
 
-      expect(result).toEqual(produtosLista[id]);
+      expect(result).toEqual(produtosLista[paramId.id]);
       
     });
 
     it('Deve chamar a camada de services', async () => {
 
-      const id = 0;
-      await produtosController.obterUm(id);
+      await produtosController.obterUm(paramId);
       expect(produtosService.obterUm).toHaveBeenCalledTimes(1);
     });
 
     it('Espera retorna um erroMensagem"', async () => {
 
-      const id = 10;
-      const errorResponse = new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${id}`);
-
-      jest.spyOn(produtosService, 'obterUm').mockReturnValueOnce(null)
-      const result = await produtosController.obterUm(id);
-
-      expect(result).toEqual(errorResponse);
+      jest.spyOn(produtosService, 'obterUm').mockRejectedValueOnce(new NotFoundException(`Produto ${paramId.id} não foi encontrado`));
+      await expect(produtosController.obterUm(paramId)).rejects.toThrow();
     });
 
     it('Espera um throw exectipion se o service quebrar.',async () =>{
 
       const id = 10;
       jest.spyOn(produtosService, 'obterUm').mockRejectedValueOnce(Error()); 
-      expect(produtosController.obterUm(id)).rejects.toThrowError();
+      expect(produtosController.obterUm(paramId)).rejects.toThrowError();
     });
   });
 

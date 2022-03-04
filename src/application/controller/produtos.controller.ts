@@ -3,6 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ProdutosServices } from "../../services/produtos.service";
 import { ProdutoDto } from "../../shared/ProdutoDto";
 import { ErrorResponse } from "../../errorResponse";
+import { IdRequest } from "../Request/idRequest";
 
 @Controller('produtos')
 @ApiTags('produtos')
@@ -25,15 +26,9 @@ export class ProdutosController{
     @Get(':id')
     @ApiOperation({ summary: 'Recupera produto pelo ID' })
     @ApiResponse({status: 200,description: 'Produto encontrado',type: ProdutoDto})
-    async obterUm(@Param('id') id: number):Promise<any>
+    async obterUm(@Param('id') param: IdRequest):Promise<any>
     {
-        const produto = await this.produtosServices.obterUm(id);
-
-        if (produto){
-            return produto;
-        }
-
-       return new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${id}`);
+        return await this.produtosServices.obterUm(param.id);
     }
 
     @Delete(':id')
