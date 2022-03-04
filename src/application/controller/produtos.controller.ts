@@ -18,6 +18,7 @@ export class ProdutosController{
     }
 
     @Post()
+    @UsePipes(new ValidationPipe({ transform: true }))
     @ApiOperation({ summary: 'Cria um novo produto' })
     async criar(@Body() produto: ProdutoRequest):Promise <ProdutoDto>{
          return await this.produtosServices.criar(produto);

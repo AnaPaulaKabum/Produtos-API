@@ -7,9 +7,8 @@ export class ErrorHttp {
 
         return new HttpException({
             status: HttpStatus.BAD_REQUEST,
-            error: `${recurso} encontra-se no sistema com o id ${id}`,
+            menssage: `${recurso} encontra-se no sistema com o id ${id}`,
+            error: "Bad Request"
           }, HttpStatus.BAD_REQUEST);
     }
-
-
 }
