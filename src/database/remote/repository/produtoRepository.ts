@@ -80,14 +80,14 @@ export class ProdutoRepository extends Repository<ProdutoEntity> implements IRep
     }
 
     async apagar(id: number): Promise<void> {
+        
+        const resultado = await this.findOne({id:id});
+
+        if (!resultado){
+            throw new NotFoundException(`Produto ${id} não foi encontrado`);
+        }
 
         try {           
-            const resultado = await this.findOne({id:id});
-
-            if (!resultado){
-                throw new NotFoundException(`Produto ${id} não foi encontrado`);
-            }
-
             await this.delete(resultado);
 
         } catch (error) {

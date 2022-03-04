@@ -24,7 +24,7 @@ export class ProdutosServices{
 
     async apagar(id:number): Promise<any>{
 
-        await this.repository.apagar(id);
+        return await this.repository.apagar(id);
      }
 
      async alterar(produto: ProdutoDto): Promise<ProdutoDto>{
