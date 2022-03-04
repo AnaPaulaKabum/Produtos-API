@@ -22,9 +22,9 @@ export class ProdutosServices{
         return await this.repository.obterUm(id);            
     }
 
-    async apagar(produto:ProdutoDto): Promise<any>{
+    async apagar(id:number): Promise<any>{
 
-        await this.repository.apagar(produto.id);
+        await this.repository.apagar(id);
      }
 
      async alterar(produto: ProdutoDto): Promise<ProdutoDto>{

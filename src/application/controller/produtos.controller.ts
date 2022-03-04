@@ -1,9 +1,8 @@
-import { Body, Controller, Delete, Get, Param,Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param,ParseIntPipe,Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ProdutosServices } from "../../services/produtos.service";
 import { ProdutoDto } from "../../shared/ProdutoDto";
-import { ErrorResponse } from "../../errorResponse";
-import { IdRequest } from "../Request/idRequest";
+
 
 @Controller('produtos')
 @ApiTags('produtos')
@@ -26,22 +25,15 @@ export class ProdutosController{
     @Get(':id')
     @ApiOperation({ summary: 'Recupera produto pelo ID' })
     @ApiResponse({status: 200,description: 'Produto encontrado',type: ProdutoDto})
-    async obterUm(@Param('id') param: IdRequest):Promise<any>
+    async obterUm(@Param('id', ParseIntPipe) id: number):Promise<any>
     {
-        return await this.produtosServices.obterUm(param.id);
+        return await this.produtosServices.obterUm(id);
     }
 
     @Delete(':id')
     @ApiOperation({ summary: 'Deletar um produto' })
-    async apagar(@Param('id') id: number):Promise<any> {
-
-       const produto = await this.produtosServices.obterUm(id);
-        if (produto){
-            await this.produtosServices.apagar(produto);
-            return ;           
-        }  
-        
-        return new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${id}`);
+    async apagar(@Param('id', ParseIntPipe) id: number) :Promise<any> {
+        return await this.produtosServices.apagar(id);
     }
 
     @Put()

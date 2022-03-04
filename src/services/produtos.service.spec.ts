@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ErrorResponse } from '../errorResponse';
 import { ProdutosServices } from './produtos.service';
-import {produtosLista,produtoNovo,produtoAlterar,produtoApagar} from '../database/mock/produto.mock';
+import {produtosLista,produtoNovo,produtoAlterar} from '../database/mock/produto.mock';
 import { ProdutoRepository } from '../database/remote/repository/produtoRepository';
 import { InternalServerErrorException } from '@nestjs/common/exceptions';
 
@@ -112,22 +112,25 @@ describe('ProdutosService', () => {
   });
 
   describe('Apagar', () => {
-    it('Deletar um Produto"', async () => {
+    it('Deletar um Produto', async () => {
 
-      const resultado = await produtosService.apagar(produtoApagar);
+      const id = 1;
+      const resultado = await produtosService.apagar(id);
       expect(resultado).toEqual(undefined);
       expect(produtoRepositorio.apagar).toHaveBeenCalled;
     });
 
     it('Deverá passar o mesmo retorno do services para o repositorio. ', async () => {
 
-      await produtosService.apagar(produtoApagar);
-      expect(produtoRepositorio.apagar).toBeCalledWith(produtoApagar.id);
+      const id = 1;
+      await produtosService.apagar(id);
+      expect(produtoRepositorio.apagar).toBeCalledWith(id);
      });
 
      it('Não deve lançar excessão se o repositorio retornar. ', async () => {
        
-      await expect(produtosService.apagar(produtoApagar)).resolves.not.toThrow();
+      const id = 1;
+      await expect(produtosService.apagar(id)).resolves.not.toThrow();
     });
   });
 });

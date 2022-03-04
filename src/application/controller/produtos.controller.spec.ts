@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ErrorResponse } from '../../errorResponse';
 import { ProdutosServices } from '../../services/produtos.service';
 import { ProdutosController } from './produtos.controller';
-import { paramId, produtoAlterar, produtoNovo, produtosLista } from '../../database/mock/produto.mock';
+import { produtoAlterar, produtoNovo, produtosLista } from '../../database/mock/produto.mock';
 import { NotFoundException } from '@nestjs/common';
 
 describe('ProdutosController', () => {
@@ -56,29 +55,34 @@ describe('ProdutosController', () => {
   describe('obterUm()', () => {
     it('Deve retorna um produto pelo id', async () => {
 
-      const result = await produtosController.obterUm(paramId);
+      const id = 1;
 
-      expect(result).toEqual(produtosLista[paramId.id]);
+      const result = await produtosController.obterUm(id);
+
+      expect(result).toEqual(produtosLista[0]);
       
     });
 
     it('Deve chamar a camada de services', async () => {
 
-      await produtosController.obterUm(paramId);
+      const id = 1;
+
+      await produtosController.obterUm(id);
       expect(produtosService.obterUm).toHaveBeenCalledTimes(1);
     });
 
     it('Espera retorna um erroMensagem"', async () => {
 
-      jest.spyOn(produtosService, 'obterUm').mockRejectedValueOnce(new NotFoundException(`Produto ${paramId.id} não foi encontrado`));
-      await expect(produtosController.obterUm(paramId)).rejects.toThrow();
+      const id = 1;
+      jest.spyOn(produtosService, 'obterUm').mockRejectedValueOnce(new NotFoundException(`Produto ${id} não foi encontrado`));
+      await expect(produtosController.obterUm(id)).rejects.toThrow();
     });
 
     it('Espera um throw exectipion se o service quebrar.',async () =>{
 
       const id = 10;
       jest.spyOn(produtosService, 'obterUm').mockRejectedValueOnce(Error()); 
-      expect(produtosController.obterUm(paramId)).rejects.toThrowError();
+      expect(produtosController.obterUm(id)).rejects.toThrowError();
     });
   });
 
@@ -130,7 +134,7 @@ describe('ProdutosController', () => {
   describe('Apagar()', () => {
     it('Deve apagar um Produto e retornar undefined', async () => {
 
-      const id = 0;
+      const id = 1;
       const resultado = await produtosController.apagar(id);
       expect(resultado).toBeUndefined();
       expect(produtosService.apagar).toHaveBeenCalledTimes(1);
@@ -139,7 +143,7 @@ describe('ProdutosController', () => {
 
     it('Deve chamar obterum() e apagar() do services', async () => {
 
-      const id = 0;
+      const id = 1;
       await produtosController.apagar(id);
       expect(produtosController.obterUm).toHaveBeenCalled;
       expect(produtosService.apagar).toHaveBeenCalledTimes(1);
@@ -147,20 +151,8 @@ describe('ProdutosController', () => {
 
     it('Espera falhar se a camada de services ocorrer um throw', async () => {
 
-      const id = 0;
       jest.spyOn(produtosService,'apagar').mockResolvedValueOnce(new Error());
       expect(produtosController.obterUm).rejects.toThrow();
-    });
-
-    it('Retornar mensagem que não foi encontrado o Produto"', async () => {
-
-      const id = 10;
-      const errorResponse = new ErrorResponse(101, `Nao foi encontrado o produto com codigo ${10}`);
-
-      jest.spyOn(produtosService, 'obterUm').mockResolvedValue(undefined);
-
-      const resultado = await produtosController.apagar(id);
-      expect(resultado).toEqual(errorResponse);
     });
   });
 });
