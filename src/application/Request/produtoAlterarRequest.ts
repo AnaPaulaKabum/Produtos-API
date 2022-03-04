@@ -1,8 +1,10 @@
-import { IsNotEmpty, IsNumber, IsNumberString, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
-export class ProdutoRequest {
+export class ProdutoAlterarRequest {
 
-    id?:number;
+    @IsNotEmpty()
+    @IsNumber()
+    id:number;
 
     @IsNotEmpty()
     @IsString()

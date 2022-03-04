@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProdutosServices } from '../../services/produtos.service';
 import { ProdutosController } from './produtos.controller';
-import { produtoAlterar, produtoNovo, produtosLista } from '../../database/mock/produto.mock';
+import { produtoAlterar, produtoAlterarRequest, produtoNovo, produtosLista } from '../../database/mock/produto.mock';
 import { NotFoundException } from '@nestjs/common';
 
 describe('ProdutosController', () => {
@@ -114,20 +114,20 @@ describe('ProdutosController', () => {
   describe('alterar()', () => {
     it('Deve alterar um Produto"', async () => {
 
-      const resultado = await produtosController.alterar(produtoAlterar);
+      const resultado = await produtosController.alterar(produtoAlterarRequest);
       expect(resultado).toEqual(produtoAlterar);
     });
 
     it('Deve chamar a camada de services', async () => {
 
-      await produtosController.alterar(produtoAlterar);
+      await produtosController.alterar(produtoAlterarRequest);
       expect(produtosService.alterar).toHaveBeenCalledTimes(1); 
     });
 
     it('Espera um throw exectipion se o service quebrar.',async () =>{
 
       jest.spyOn(produtosService, 'alterar').mockRejectedValueOnce(Error()); 
-      expect(produtosController.alterar(produtoAlterar)).rejects.toThrowError();
+      expect(produtosController.alterar(produtoAlterarRequest)).rejects.toThrowError();
     });
   });
 

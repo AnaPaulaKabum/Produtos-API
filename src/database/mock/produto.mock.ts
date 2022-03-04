@@ -1,3 +1,5 @@
+import { ProdutoAlterarRequest } from "src/application/Request/produtoAlterarRequest";
+import { ProdutoCriarRequest } from "src/application/Request/produtoCriarRequest";
 import { ProdutoDto } from "../../shared/ProdutoDto";
 import { ProdutoEntity } from "../remote/entity/produto.entity";
 
@@ -23,3 +25,5 @@ export const produtosLista: Array<ProdutoDto> =[
   export const produtoCadastrado = {id:1, codigo:"LV006", nome: "Alterar Produto", preco: 99.90, qtde:100} as ProdutoEntity;
   export const produtoCriado     = {id:5, codigo:"LV005", nome: "Produto Criado ", preco: 99.90, qtde:100} as ProdutoEntity ;
 
+  export const produtoCriarRequest   = {codigo:"LV006", nome: "Alterar Produto", preco: 99.90, qtde:100} as ProdutoCriarRequest;
+  export const produtoAlterarRequest = {id:5, codigo:"LV005", nome: "Produto Criado ", preco: 99.90, qtde:100} as ProdutoAlterarRequest ;

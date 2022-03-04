@@ -2,7 +2,9 @@ import { Body, Controller, Delete, Get, Param,ParseIntPipe,Post, Put, UsePipes, 
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ProdutosServices } from "../../services/produtos.service";
 import { ProdutoDto } from "../../shared/ProdutoDto";
-import { ProdutoRequest } from "../Request/produtoRequest";
+import { produtoResponseMappear } from "../mapper/produtoResponseMappear";
+import { ProdutoAlterarRequest } from "../Request/produtoAlterarRequest";
+import { ProdutoCriarRequest } from "../Request/produtoCriarRequest";
 
 
 @Controller('produtos')
@@ -20,15 +22,17 @@ export class ProdutosController{
     @Post()
     @UsePipes(new ValidationPipe({ transform: true }))
     @ApiOperation({ summary: 'Cria um novo produto' })
-    async criar(@Body() produto: ProdutoRequest):Promise <ProdutoDto>{
-         return await this.produtosServices.criar(produto);
+    async criar(@Body() produto: ProdutoCriarRequest):Promise <ProdutoDto>{
+
+        const resultado =  produtoResponseMappear.mapCriarDTO(produto);
+         return await this.produtosServices.criar(resultado);
     }
 
     @Get(':id')
     @ApiOperation({ summary: 'Recupera produto pelo ID' })
     @ApiResponse({status: 200,description: 'Produto encontrado',type: ProdutoDto})
-    async obterUm(@Param('id', ParseIntPipe) id: number):Promise<any>
-    {
+    async obterUm(@Param('id', ParseIntPipe) id: number):Promise<any>{
+        
         return await this.produtosServices.obterUm(id);
     }
 
@@ -39,8 +43,11 @@ export class ProdutosController{
     }
 
     @Put()
+    @UsePipes(new ValidationPipe({ transform: true }))
     @ApiOperation({ summary: 'Altera um produto' })
-    async alterar(@Body() produto: ProdutoDto): Promise<ProdutoDto>{
-        return this.produtosServices.alterar(produto);
+    async alterar(@Body() produto: ProdutoAlterarRequest): Promise<ProdutoDto>{
+
+        const resultado =  produtoResponseMappear.mapAlterarDTO(produto);
+        return await this.produtosServices.alterar(resultado);
     }
 }
