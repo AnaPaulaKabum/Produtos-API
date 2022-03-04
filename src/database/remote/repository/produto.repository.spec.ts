@@ -1,5 +1,6 @@
 import { InternalServerErrorException, NotFoundException, Type } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { ErrorHttp } from '../../../application/Error/errorHttp';
 import { produtoAlterar, produtoCadastrado, produtoCriado, produtoNovo, produtosLista, produtosListaEntity } from '../../../database/mock/produto.mock';
 import { ProdutoRepository } from './produtoRepository';
 
@@ -91,7 +92,7 @@ describe('ProdutosService', () => {
      
         jest.spyOn(produtoRepositorio,'findOne').mockResolvedValueOnce(produtoCadastrado);
 
-       await expect(produtoRepositorio.criar(produtosLista[0])).rejects.toThrow(new Error(`Produto encontra-se no sistema com o id ${produtoCadastrado.id}`))
+        await expect(produtoRepositorio.criar(produtosLista[0])).rejects.toThrow(ErrorHttp.recursoCadastrado('Produto',produtoCadastrado.id))
       });
 
       it('Deve chamar o metodo save, findOne pelo menos uma vez', async () => {

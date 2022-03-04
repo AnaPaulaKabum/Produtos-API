@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param,ParseIntPipe,Post, Put, UsePipes, 
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ProdutosServices } from "../../services/produtos.service";
 import { ProdutoDto } from "../../shared/ProdutoDto";
+import { ProdutoRequest } from "../Request/produtoRequest";
 
 
 @Controller('produtos')
@@ -18,7 +19,7 @@ export class ProdutosController{
 
     @Post()
     @ApiOperation({ summary: 'Cria um novo produto' })
-    async criar(@Body() produto: ProdutoDto):Promise <ProdutoDto>{
+    async criar(@Body() produto: ProdutoRequest):Promise <ProdutoDto>{
          return await this.produtosServices.criar(produto);
     }
 

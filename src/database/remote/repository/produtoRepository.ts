@@ -1,10 +1,10 @@
 import { ProdutoEntity } from "../entity/produto.entity";
-import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { Repository as IRepositorio} from "../../../core/base/repository";
 import { ProdutoDto } from "../../../shared/ProdutoDto";
 import { ProdutoMapper } from "../mappear/produtoMappear";
 import { EntityRepository, Repository } from "typeorm";
+import { ErrorHttp } from "../../../application/Error/errorHttp";
 
 @EntityRepository(ProdutoEntity)
 export class ProdutoRepository extends Repository<ProdutoEntity> implements IRepositorio <ProdutoDto>{
@@ -51,7 +51,7 @@ export class ProdutoRepository extends Repository<ProdutoEntity> implements IRep
         const resultadoConsulta = await this.findOne({where: [{codigo:data.codigo}]})
 
         if (resultadoConsulta){
-            throw new Error(`Produto encontra-se no sistema com o id ${resultadoConsulta.id}`)
+            throw ErrorHttp.recursoCadastrado('Produto',resultadoConsulta.id);
         }
 
         let produtoEnt = this.mappear.mapFrom(data);
