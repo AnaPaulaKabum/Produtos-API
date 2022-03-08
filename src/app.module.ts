@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ProdutosController } from './application/controller/produtos.controller';
+import { configConexao } from './database/configConexao';
 import { ProdutosServices } from './services/produtos.service';
-import { ProdutoEntity } from './database/remote/entity/produto.entity';
-import { ProdutoRepository } from './database/remote/repository/produtoRepository';
-import { ProdutoMapper } from './database/remote/mappear/produtoMappear';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
 
@@ -22,21 +19,8 @@ import { ConfigModule } from '@nestjs/config';
 
 // Configuração para banco de dados:
 
-imports: [
-  ConfigModule.forRoot(),
-  TypeOrmModule.forRoot({
-    type: 'mysql',
-    host: process.env.HOST,
-    port: parseInt(process.env.PORT),
-    username: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE,
-    entities: [ProdutoEntity],
-    synchronize: true,
-  }),
-  TypeOrmModule.forFeature([ProdutoRepository]),
-],
+  imports: [ ...configConexao],
   controllers: [ProdutosController],
-  providers:   [ProdutosServices,ProdutoMapper],
+  providers:   [ProdutosServices],
 })
 export class AppModule {}
