@@ -4,7 +4,7 @@ import { ErrorHttp } from '../../../application/Error/errorHttp';
 import { produtoAlterar, produtoCadastrado, produtoCriado, produtoNovo, produtosLista, produtosListaEntity } from '../../../database/mock/produto.mock';
 import { ProdutoRepository } from './produtoRepository';
 
-describe('ProdutosService', () => {
+describe('ProdutoRepository', () => {
 
   let produtoRepositorio: ProdutoRepository;
 
