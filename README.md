@@ -67,9 +67,10 @@ $ npm run test:cov
 ## Configuration
 
 Favor configurar o arquivo .env com o banco de dados, com os seguintes campos:
-
-process.env.HOST =
+```bash
+HOST =
 PORT=
 DATABASE_USER=
 DATABASE_PASSWORD=
 DATABASE=
+```
