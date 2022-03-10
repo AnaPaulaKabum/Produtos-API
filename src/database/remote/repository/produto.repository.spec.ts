@@ -2,36 +2,41 @@ import { InternalServerErrorException, NotFoundException, Type } from '@nestjs/c
 import { Test, TestingModule } from '@nestjs/testing';
 import { ErrorHttp } from '../../../application/Error/errorHttp';
 import { produtoAlterar, produtoCadastrado, produtoCriado, produtoNovo, produtosLista, produtosListaEntity } from '../../../database/mock/produto.mock';
+import { ProdutoEntity } from '../entity/produto.entity';
 import { ProdutoRepository } from './produtoRepository';
 
 describe('ProdutoRepository', () => {
 
   let produtoRepositorio: ProdutoRepository;
-
+  let produtoConsulta;
+  
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ProdutoRepository],
+      providers: [ProdutoRepository,
+      { provide: 'PRODUTO_REPOSITORY',
+        useValue:{
+          query: jest.fn().mockResolvedValue(produtosListaEntity),
+          findOne: jest.fn().mockResolvedValue(produtosListaEntity[0]),
+          save: jest.fn().mockResolvedValue(produtosListaEntity[0]),
+          delete: jest.fn().mockResolvedValue(undefined)
+      }}],
     }).compile();
 
     produtoRepositorio = module.get(ProdutoRepository);
-
-    produtoRepositorio.query = jest.fn().mockResolvedValue(produtosListaEntity);
-    produtoRepositorio.findOne = jest.fn().mockResolvedValue(produtosListaEntity[0]);
-    produtoRepositorio.save = jest.fn().mockResolvedValue(produtosListaEntity[0]);
-    produtoRepositorio.delete = jest.fn().mockResolvedValue(undefined);
+    produtoConsulta = module.get('PRODUTO_REPOSITORY');
   });
 
   describe('obterTodos()', () => {
 
     it('Se o repostiroy falhar devera retornar um erro.', async () => {
 
-      jest.spyOn(produtoRepositorio,'query').mockRejectedValueOnce(new InternalServerErrorException());
+      jest.spyOn(produtoConsulta,'query').mockRejectedValueOnce(new InternalServerErrorException());
       await expect(produtoRepositorio.obterTodos()).rejects.toThrow();
      });
 
      it('Se não possuir nenhum produto retorna []', async () => {
 
-      jest.spyOn(produtoRepositorio,'query').mockResolvedValueOnce({});
+      jest.spyOn(produtoConsulta,'query').mockResolvedValueOnce({});
       const resultado = await produtoRepositorio.obterTodos();
       expect(resultado).toEqual([]);
      });
@@ -39,7 +44,7 @@ describe('ProdutoRepository', () => {
     it('Deve chamar o metodo query pelo menos uma vez', async () => {
      
       await produtoRepositorio.obterTodos();
-      expect(produtoRepositorio.query).toBeCalledTimes(1);
+      expect(produtoConsulta.query).toBeCalledTimes(1);
      });
 
     it('Deve retorna todos os produtos', async () => {
@@ -54,14 +59,14 @@ describe('ProdutoRepository', () => {
     it('Se o repostiroy falhar devera retornar um erro.', async () => {
 
       const id = 10;
-      jest.spyOn(produtoRepositorio,'findOne').mockRejectedValueOnce(new InternalServerErrorException());
+      jest.spyOn(produtoConsulta,'findOne').mockRejectedValueOnce(new InternalServerErrorException());
       await expect(produtoRepositorio.obterUm(id)).rejects.toThrow();
      });
 
      it('Se nao possuir o produto, devera retornar um throw', async () => {
 
       const id = 10;
-      jest.spyOn(produtoRepositorio,'findOne').mockReturnValueOnce(undefined);
+      jest.spyOn(produtoConsulta,'findOne').mockReturnValueOnce(undefined);
       await expect(produtoRepositorio.obterUm(id)).rejects.toThrow(new NotFoundException(`Produto ${id} não foi encontrado`));
       });
 
@@ -69,7 +74,7 @@ describe('ProdutoRepository', () => {
      
         const id = 1;
         await produtoRepositorio.obterUm(id);
-        expect(produtoRepositorio.findOne).toBeCalledTimes(1);
+        expect(produtoConsulta.findOne).toBeCalledTimes(1);
       });
 
      it('Se encontrar o produto devera retornar', async () => {
@@ -84,29 +89,29 @@ describe('ProdutoRepository', () => {
 
       it('Se o repostiroy falhar devera retornar um erro.', async () => {
 
-        jest.spyOn(produtoRepositorio,'save').mockRejectedValueOnce(new InternalServerErrorException());
+        jest.spyOn(produtoConsulta,'save').mockRejectedValueOnce(new InternalServerErrorException());
         await expect(produtoRepositorio.criar(produtoNovo)).rejects.toThrow();
       });
 
       it('Se buscar um produto já cadastrado, devera ocorrer um erro.', async () => {
      
-        jest.spyOn(produtoRepositorio,'findOne').mockResolvedValueOnce(produtoCadastrado);
+        jest.spyOn(produtoConsulta,'findOne').mockResolvedValueOnce(produtoCadastrado);
 
         await expect(produtoRepositorio.criar(produtosLista[0])).rejects.toThrow(ErrorHttp.recursoCadastrado('Produto',produtoCadastrado.id))
       });
 
       it('Deve chamar o metodo save, findOne pelo menos uma vez', async () => {
 
-        jest.spyOn(produtoRepositorio,'findOne').mockResolvedValueOnce(undefined);
+        jest.spyOn(produtoConsulta,'findOne').mockResolvedValueOnce(undefined);
         await produtoRepositorio.criar(produtoNovo);
-        expect(produtoRepositorio.save).toBeCalledTimes(1);
-        expect(produtoRepositorio.findOne).toBeCalledTimes(1);
+        expect(produtoConsulta.save).toBeCalledTimes(1);
+        expect(produtoConsulta.findOne).toBeCalledTimes(1);
         });
       
         it('Se criar o produto, deverá retornar', async () => {
 
-          jest.spyOn(produtoRepositorio,'findOne').mockResolvedValueOnce(undefined);
-          jest.spyOn(produtoRepositorio,'save').mockResolvedValueOnce(produtoCriado);
+          jest.spyOn(produtoConsulta,'findOne').mockResolvedValueOnce(undefined);
+          jest.spyOn(produtoConsulta,'save').mockResolvedValueOnce(produtoCriado);
           const resultado = await produtoRepositorio.criar(produtoNovo);
           expect(resultado).toEqual(produtoCriado);
           });  
@@ -117,7 +122,7 @@ describe('ProdutoRepository', () => {
       it('Se o repostiroy falhar devera retornar um erro.', async () => {
 
         const id = 1;
-        jest.spyOn(produtoRepositorio,'delete').mockRejectedValueOnce(new Error());
+        jest.spyOn(produtoConsulta,'delete').mockRejectedValueOnce(new Error());
         await expect(produtoRepositorio.apagar(id)).rejects.toThrow();
       });
 
@@ -125,14 +130,14 @@ describe('ProdutoRepository', () => {
      
         const id = 1;
         await produtoRepositorio.apagar(id);
-        expect(produtoRepositorio.findOne).toBeCalledTimes(1);
-        expect(produtoRepositorio.delete).toBeCalledTimes(1);
+        expect(produtoConsulta.findOne).toBeCalledTimes(1);
+        expect(produtoConsulta.delete).toBeCalledTimes(1);
        });
 
        it('Devera retornar um erro, caso tentar apagar um produto que não exista', async () => {
      
         const id = 1;
-        jest.spyOn(produtoRepositorio,'findOne').mockResolvedValueOnce(undefined);
+        jest.spyOn(produtoConsulta,'findOne').mockResolvedValueOnce(undefined);
         expect(produtoRepositorio.apagar(id)).rejects.toThrow(new NotFoundException(`Produto ${id} não foi encontrado`));
        });
 
@@ -149,7 +154,7 @@ describe('ProdutoRepository', () => {
       it('Se o repostiroy falhar devera retornar um erro.', async () => {
   
         const id = 10;
-        jest.spyOn(produtoRepositorio,'save').mockRejectedValueOnce(new InternalServerErrorException());
+        jest.spyOn(produtoConsulta,'save').mockRejectedValueOnce(new InternalServerErrorException());
         await expect(produtoRepositorio.alterar(produtoAlterar)).rejects.toThrow();
        });
       });
@@ -157,13 +162,13 @@ describe('ProdutoRepository', () => {
       it('Deve chamar o metodo save e o findOne pelo menos uma vez', async () => {
      
         await produtoRepositorio.alterar(produtoAlterar);
-        expect(produtoRepositorio.findOne).toBeCalledTimes(1);
-        expect(produtoRepositorio.save).toBeCalledTimes(1);
+        expect(produtoConsulta.findOne).toBeCalledTimes(1);
+        expect(produtoConsulta.save).toBeCalledTimes(1);
       });
 
       it('Se alterar um produto que não exista, deverá retornar um erro.', async () => {
      
-        jest.spyOn(produtoRepositorio,'findOne').mockReturnValueOnce(undefined);
+        jest.spyOn(produtoConsulta,'findOne').mockReturnValueOnce(undefined);
         await expect(produtoRepositorio.alterar(produtoAlterar)).rejects.toThrow(
           new NotFoundException(`Produto ${produtoAlterar.id} não foi encontrado`));
       });
