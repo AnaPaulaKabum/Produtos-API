@@ -2,10 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { ProdutoRepository } from '../src/database/remote/repository/produtoRepository';
-import { connect } from 'http2';
 import { produtosLista, produtosListaEntity } from '../src/database/mock/produto.mock';
-import { Connection } from 'typeorm';
 
 describe('ProdutoController (e2e)', () => {
   let app: INestApplication;
@@ -28,8 +25,6 @@ describe('ProdutoController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
   });
-
-
 
     it('/produtos (GET) : Retorno 200', async () => {
       return request(app.getHttpServer())
@@ -78,8 +73,6 @@ describe('ProdutoController (e2e)', () => {
     });
 
     it('/produtos/id (PUT) : Retorno 200', async () => {
-
-      //jest.spyOn(produtoConsulta,'findOne').mockReturnValueOnce(null);
 
       const alterarProduto = 
       {
