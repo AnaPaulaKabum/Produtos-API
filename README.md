@@ -1,7 +1,6 @@
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
   <a href="https://swagger.io/tools/swagger-ui/" target="blank"><img src="https://sequelize.org/v6/manual/asset/logo.png" width="150" alt="Swagger Logo" /></a>
-  <a href="https://sequelize.org/v6/" target="blank"><img src="https://static1.smartbear.co/swagger/media/assets/images/swagger_logo.svg" width="320" alt="Swagger Logo" /></a>
 </p>
 
 ## Description
@@ -16,19 +15,21 @@ Nucleo : Services
 src
   - Application
       - Controller: Recebem as requisições.
+      - Error: Mensagens patrões de error.
+      - Mappear: converte Request em DTO.
   - Services: Regras de negocios
   - core
       - base: toda classe de abstração e interface.
   - database:
-      - cache-memory: Repositorio na memoria
-      - remote: repositorio de banco de dados
-          - entity: entidades do bacno de dados
+      - cache-memory: Repositorio na memoria (necessário refatorar)
+      - remote: repositorio de banco de dados com typeORM
+          - entity: entidades do banco de dados
           - mappers: Mapeamento de DTO para Entitys do banco
+          - providers: Providers dos bancos.
           - repositories repositorio conectando ao banco.
-      - mock: repositorio para testes.
+      - mock: Lista e constantes para testes.
   
-  - shared: Criação de Enums, DTOs e Exception filters (Podendo ser vistas pela camada de Application,Services)
-
+  - shared: Criação de Enums, DTOs. (Podendo ser vistas por todas as camadas)
 
 
 ## Installation
@@ -65,4 +66,10 @@ $ npm run test:cov
 
 ## Configuration
 
-Favor configurar o arquivo .env com o banco de dados.
+Favor configurar o arquivo .env com o banco de dados, com os seguintes campos:
+
+process.env.HOST =
+PORT=
+DATABASE_USER=
+DATABASE_PASSWORD=
+DATABASE=
