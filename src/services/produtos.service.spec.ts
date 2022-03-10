@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ErrorResponse } from '../errorResponse';
 import { ProdutosServices } from './produtos.service';
 import {produtosLista,produtoNovo,produtoAlterar} from '../database/mock/produto.mock';
 import { ProdutoRepository } from '../database/remote/repository/produtoRepository';
