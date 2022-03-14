@@ -1,11 +1,17 @@
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-  <a href="https://swagger.io/tools/swagger-ui/" target="blank"><img src="https://sequelize.org/v6/manual/asset/logo.png" width="150" alt="Swagger Logo" /></a>
 </p>
 
 ## Description
 
-CRUD de produtos utilizando NestJS [Nest](https://github.com/nestjs/nest).
+CRUD de produtos utilizando:
+
+- [Nest](https://github.com/nestjs/nest).
+- [Jest](https://jestjs.io/pt-BR/docs/getting-started)
+- [TYPEORM](https://typeorm.io/#/)
+- [SuperTest](https://www.npmjs.com/package/supertest)
+- [Swagger](https://swagger.io/tools/swagger-ui/)
+
 
 ## Organization 
 
@@ -67,9 +73,10 @@ $ npm run test:cov
 ## Configuration
 
 Favor configurar o arquivo .env com o banco de dados, com os seguintes campos:
-
-process.env.HOST =
+```bash
+HOST =
 PORT=
 DATABASE_USER=
 DATABASE_PASSWORD=
 DATABASE=
+```
