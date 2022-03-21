@@ -9,6 +9,5 @@ export const produtoProviders = [
     useFactory: (connection: Connection) => connection.getRepository(ProdutoEntity),
     inject: ['DATABASE_CONNECTION'],
   },
-  ProdutoRepository,
-  ProdutosServices
+  ProdutoRepository
 ];

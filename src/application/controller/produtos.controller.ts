@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param,ParseIntPipe,Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ProdutoRepository } from "src/database/remote/repository/produtoRepository";
 import { ProdutosServices } from "../../services/produtos.service";
 import { ProdutoDto } from "../../shared/ProdutoDto";
 import { produtoResponseMappear } from "../mapper/produtoResponseMappear";
@@ -11,7 +12,13 @@ import { ProdutoCriarRequest } from "../Request/produtoCriarRequest";
 @ApiTags('produtos')
 export class ProdutosController{
 
-    constructor(private produtosServices: ProdutosServices){}
+    private produtosServices: ProdutosServices
+
+    constructor(repository: ProdutoRepository){
+
+
+        this.produtosServices = new ProdutosServices(repository);
+    }
 
     @Get()
     @ApiOperation({ summary: 'Lista de todos os produtos' })

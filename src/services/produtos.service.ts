@@ -1,8 +1,6 @@
-import { Injectable } from "@nestjs/common";
 import { ProdutoRepository } from "../database/remote/repository/produtoRepository";
 import { ProdutoDto } from "../shared/ProdutoDto";
 
-@Injectable()
 export class ProdutosServices{
 
     constructor(private readonly repository: ProdutoRepository ) {};
